@@ -1,0 +1,157 @@
+seo:
+  title: Видеонаблюдение - Профессиональные системы безопасности
+  description: Современные системы видеонаблюдения для вашего дома и бизнеса. Установка, настройка и обслуживание под ключ.
+title: Профессиональные системы [видеонаблюдения]{.text-primary}
+description: Защитите свой дом или бизнес с помощью современных технологий видеонаблюдения. Круглосуточный контроль и полная безопасность.
+hero:
+  links:
+    - label: Получить консультацию
+      icon: i-lucide-arrow-right
+      trailing: true
+      color: primary
+      to: '#pricing'
+      size: xl
+    - label: Наши проекты
+      icon: i-lucide-camera
+      size: xl
+      color: neutral
+      variant: outline
+      to: '#testimonials'
+section:
+  title: '[Надежная защита]{.text-primary} вашего имущества'
+  description: Современные IP-камеры высокого разрешения с возможностью удаленного просмотра и круглосуточной записью видео.
+  images:
+    mobile: '/images/macbook-mobile.svg'
+    desktop: '/images/macbook.svg'
+  features:
+    - title: Высокое качество изображения
+      description: Камеры с разрешением до 4K обеспечивают четкую картинку даже в условиях низкой освещенности. Интеллектуальная система обработки изображения гарантирует детализацию в любое время суток.
+      class: border-l border-primary pl-4
+    - title: Удаленный доступ 24/7
+      description: Просматривайте видео с любого устройства в режиме реального времени. Полный контроль над вашей системой безопасности из любой точки мира через мобильное приложение.
+      class: border-l border-default pt-4 pl-4
+    - title: Интеллектуальная аналитика
+      description: Распознавание лиц, детекция движения и автоматические уведомления о подозрительной активности. Умные алгоритмы помогут предотвратить инциденты до их возникновения.
+      class: border-l border-default pt-4 pl-4
+features:
+  title: Полный контроль над [безопасностью]{.text-primary}
+  description: Современные технологии видеонаблюдения для защиты вашего дома и бизнеса.
+  features:
+    - title: IP-камеры высокого разрешения
+      description: Камеры с разрешением до 4K и ночным видением обеспечивают кристально чистое изображение в любых условиях освещения.
+      icon: i-lucide-camera
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Облачное хранилище
+      description: Автоматическое резервное копирование записей в облако. Ваши данные всегда в безопасности и доступны из любой точки мира.
+      icon: i-lucide-cloud
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Мобильное приложение
+      description: Просматривайте видео в реальном времени с вашего смартфона или планшета. Управляйте камерами удаленно.
+      icon: i-lucide-smartphone
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Детекция движения
+      description: Умная система распознавания движения с мгновенными push-уведомлениями при обнаружении активности.
+      icon: i-lucide-activity
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Распознавание лиц
+      description: Интеллектуальная система распознавания лиц для идентификации посетителей и контроля доступа на территорию.
+      icon: i-lucide-scan-face
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+    - title: Круглосуточная запись
+      description: Непрерывная запись видео 24/7 с возможностью быстрого поиска нужных моментов по дате и времени.
+      icon: i-lucide-video
+      ui:
+        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+steps:
+  title: Установка системы в [3 этапа]{.text-primary}
+  description: Профессиональный монтаж и настройка системы видеонаблюдения под ключ.
+  items:
+    - title: Консультация и проектирование
+      description: Бесплатный выезд специалиста на объект для оценки и составления оптимального плана размещения камер. Подбор оборудования под ваши задачи и бюджет.
+      image:
+        light: '/images/light/connect.svg'
+        dark: '/images/dark/connect.svg'
+    - title: Установка и настройка
+      description: Профессиональный монтаж камер, прокладка кабелей и настройка оборудования. Установка занимает от 1 до 3 дней в зависимости от объема работ.
+      image:
+        light: '/images/light/optimize.svg'
+        dark: '/images/dark/optimize.svg'
+    - title: Обучение и поддержка
+      description: Подробный инструктаж по работе с системой и мобильным приложением. Круглосуточная техническая поддержка и бесплатное обслуживание в течение года.
+      image:
+        light: '/images/light/track.svg'
+        dark: '/images/dark/track.svg'
+pricing:
+  title: Выберите оптимальный [тариф]{.text-primary}
+  description: Гибкие тарифные планы для дома и бизнеса. Профессиональное оборудование, установка и обслуживание по доступным ценам.
+  plans:
+    - title: Базовый
+      description: Идеально подходит для квартир и небольших домов.
+      price: от 25 000 ₽
+      features:
+        - 2-4 IP-камеры с разрешением Full HD
+        - Видеорегистратор на 1 ТБ
+        - Удаленный доступ через мобильное приложение
+        - Детекция движения с уведомлениями
+        - Установка и настройка под ключ
+        - Гарантия 1 год и техподдержка
+      button:
+        label: Заказать
+        color: neutral
+        variant: outline
+        to: '#'
+    - title: Профессиональный
+      description: Для коттеджей, офисов и коммерческих объектов.
+      price: от 65 000 ₽
+      features:
+        - 6-16 IP-камер с разрешением 4K
+        - Видеорегистратор на 4 ТБ с RAID
+        - Распознавание лиц и номеров автомобилей
+        - Облачное резервное копирование
+        - Интеграция с системой контроля доступа
+        - Расширенная гарантия 2 года 24/7 поддержка
+      button:
+        label: Заказать
+        variant: subtle
+        to: '#'
+testimonials:
+  title: Нам доверяют [тысячи клиентов]{.text-primary}
+  description: Узнайте, как наши системы видеонаблюдения помогли защитить имущество и обеспечить безопасность.
+  items:
+    - quote: Установили систему видеонаблюдения в загородном доме. Качество картинки отличное даже ночью. Теперь могу следить за домом из любой точки мира через телефон. Очень доволен!
+      user:
+        name: 'Алексей Петров'
+        description: 'Владелец коттеджа'
+        target: _blank
+        avatar:
+          src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alexey'
+    - quote: Для нашего офиса установили 12 камер с распознаванием лиц. Система работает безупречно, монтаж выполнили быстро и качественно. Рекомендую!
+      user:
+        name: 'Елена Смирнова'
+        description: 'Директор IT-компании'
+        target: _blank
+        avatar:
+          src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elena'
+    - quote: После установки системы видеонаблюдения на складе количество краж сократилось до нуля. Отличное соотношение цены и качества. Профессиональная команда!
+      user:
+        name: 'Дмитрий Козлов'
+        description: 'Владелец складского комплекса'
+        target: _blank
+        avatar:
+          src: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dmitry'
+cta:
+  title: Готовы защитить свой дом или бизнес?
+  description: Получите бесплатную консультацию специалиста и расчет стоимости системы видеонаблюдения для вашего объекта.
+  links:
+    - label: Получить консультацию
+      to: '#'
+      trailingIcon: i-lucide-phone
+    - label: Наши контакты
+      to: '#'
+      variant: subtle
+      icon: i-lucide-mail
