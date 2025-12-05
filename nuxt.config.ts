@@ -38,12 +38,17 @@ export default defineNuxtConfig({
     }
   },
 
+  ssr: false,
+
+  // Отключаем загрузку Google Fonts из @nuxt/ui
+  ui: {
+    fonts: false
+  },
+
   runtimeConfig: {
-    // Приватные переменные (доступны только на сервере)
     telegramBotToken: process.env.NUXT_TELEGRAM_BOT_TOKEN,
     telegramChatId: process.env.NUXT_TELEGRAM_CHAT_ID,
     
-    // Публичные переменные (доступны на клиенте)
     public: {
       phone: process.env.NUXT_PUBLIC_PHONE,
       email: process.env.NUXT_PUBLIC_EMAIL,

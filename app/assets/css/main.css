@@ -1,8 +1,12 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
 
 @source "../../../content/**/*";
 
 @theme {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }

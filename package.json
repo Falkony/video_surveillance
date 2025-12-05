@@ -1,5 +1,5 @@
 {
-  "name": "video-surveillance-landing",
+  "name": "nnvss.ru",
   "private": true,
   "type": "module",
   "description": "Лендинг для компании по установке систем видеонаблюдения",
@@ -12,6 +12,7 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.1.0",
     "@iconify-json/lucide": "^1.2.74",
     "@iconify-json/simple-icons": "^1.2.59",
     "@nuxt/content": "^3.8.2",

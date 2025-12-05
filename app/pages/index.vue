@@ -17,7 +17,7 @@ useSeoMeta({
   ogDescription: page.value.seo?.description || page.value.description,
 });
 
-const isModalOpen = ref(false)
+const isModalOpen = ref(false);
 </script>
 
 <template>
@@ -56,7 +56,11 @@ const isModalOpen = ref(false)
             :color="link.color"
             :variant="link.variant"
             :size="link.size"
-            @click="link.label === 'Получить консультацию' ? isModalOpen = true : null"
+            @click="
+              link.label === 'Получить консультацию'
+                ? (isModalOpen = true)
+                : null
+            "
             :to="link.label !== 'Получить консультацию' ? link.to : undefined"
           />
         </div>
