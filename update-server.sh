@@ -39,3 +39,4 @@ pm2 status
 echo ""
 echo "📋 Последние 20 строк логов:"
 pm2 logs video-surveillance --lines 20 --nostream
+

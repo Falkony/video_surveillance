@@ -30,16 +30,13 @@ export const collections = {
     source: 'index.yml',
     type: 'page',
     schema: z.object({
+      subtitle: z.string().optional(),
       hero: z.object({
         links: z.array(createLinkSchema())
       }),
       section: createBaseSchema().extend({
         headline: z.string().optional(),
-        images: z.object({
-          mobile: z.string().optional(),
-          desktop: z.string().optional()
-        }),
-        features: z.array(
+        cards: z.array(
           createBaseSchema().extend({
             icon: z.string().editor({ input: 'icon' })
           })
@@ -65,6 +62,18 @@ export const collections = {
             highlight: z.boolean().optional(),
             billing_period: z.string().nonempty(),
             billing_cycle: z.string().nonempty()
+          })
+        )
+      }),
+      reviews: createBaseSchema().extend({
+        items: z.array(
+          z.object({
+            quote: z.string().nonempty(),
+            author: z.string().nonempty(),
+            role: z.string().nonempty(),
+            company: z.string().optional(),
+            rating: z.number().int().min(1).max(5),
+            avatar: z.string().nonempty()
           })
         )
       }),

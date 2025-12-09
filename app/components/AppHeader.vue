@@ -6,6 +6,11 @@ const isModalOpen = ref(false)
 
 const items = computed(() => [
   {
+    label: "Услуги",
+    to: "#section",
+    active: activeHeadings.value.includes("section"),
+  },
+  {
     label: "Возможности",
     to: "#features",
     active:
@@ -13,7 +18,7 @@ const items = computed(() => [
       !activeHeadings.value.includes("pricing"),
   },
   {
-    label: "Тарифы",
+    label: "Прайс-лист",
     to: "#pricing",
     active: activeHeadings.value.includes("pricing"),
   },
@@ -29,6 +34,7 @@ const items = computed(() => [
 nuxtApp.hooks.hookOnce("page:finish", () => {
   updateHeadings(
     [
+      document.querySelector("#section"),
       document.querySelector("#features"),
       document.querySelector("#pricing"),
       document.querySelector("#testimonials"),

@@ -10,13 +10,13 @@ export default defineEventHandler(async (event) => {
   }
 
   const message = `
-    🆕 *Новая заявка c сайта*
+🆕 *Новая заявка c сайта*
 
-    👤 *Имя:* ${body.name}
-    📱 *Телефон:* ${body.phone}
-    ${body.message ? `💬 *Сообщение:* ${body.message}` : ""}
+👤 *Имя:* ${body.name}
+📱 *Телефон:* ${body.phone}
+${body.message ? `💬 *Сообщение:* ${body.message}` : ""}
 
-    ⏰ *Время:* ${new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })}`.trim();
+⏰ *Время:* ${new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })}`.trim();
 
   try {
     await $fetch(

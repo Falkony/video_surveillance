@@ -107,9 +107,7 @@ function onSubmit() {
     </template>
 
     <template #left>
-      <p class="text-sm text-muted">
-        Видеонаблюдение © {{ new Date().getFullYear() }} • Все права защищены
-      </p>
+      <AppCopyright />
     </template>
 
     <template #right>

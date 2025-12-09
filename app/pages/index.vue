@@ -18,78 +18,155 @@ useSeoMeta({
 });
 
 const isModalOpen = ref(false);
+
+const scrollToSection = () => {
+  const section = document.getElementById('section');
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
 </script>
 
 <template>
-  <div v-if="page" class="relative">
-    <div class="hidden lg:block">
-      <UColorModeImage
-        light="/images/light/line-1.svg"
-        dark="/images/dark/line-1.svg"
-        class="absolute pointer-events-none pb-10 left-0 top-0 object-cover h-[650px]"
-      />
+  <div v-if="page" class="relative overflow-x-hidden">
+    <div class="relative overflow-x-hidden hero-section min-h-screen flex items-center justify-center">
+      <HeroBackground />
+      
+      <UPageHero
+        :description="page.description"
+        :ui="{
+          container: 'relative z-10 px-4 sm:px-6 py-20 w-full max-w-7xl mx-auto',
+          title: 'w-full px-4 text-center',
+          description: 'px-4 text-center',
+        }"
+      >
+
+        <template #title>
+          <div class="animate-fade-in-up opacity-0" style="animation-delay: 0.2s;">
+            <div class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <span class="bg-gradient-to-r from-white via-blue-100 to-primary-300 bg-clip-text text-transparent drop-shadow-2xl">
+                <MDC :value="page.title" unwrap="p" class="inline" />
+              </span>
+            </div>
+          </div>
+          <p v-if="page.subtitle" class="text-white/90 text-base sm:text-xl md:text-2xl lg:text-3xl font-medium mt-4 sm:mt-6 animate-fade-in-up opacity-0 drop-shadow-lg" style="animation-delay: 0.4s;">
+            {{ page.subtitle }}
+          </p>
+        </template>
+
+        <template #description>
+          <p class="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl max-w-4xl mx-auto animate-fade-in-up opacity-0 drop-shadow-md leading-relaxed" style="animation-delay: 0.6s;">{{ page.description }}</p>
+        </template>
+
+        <template #links>
+          <div class="flex flex-wrap items-center justify-center gap-4 animate-fade-in-up opacity-0" style="animation-delay: 0.8s;">
+            <UButton
+              v-for="(link, index) in page.hero.links"
+              :key="index"
+              :label="link.label"
+              :icon="link.icon"
+              :trailing="link.trailing"
+              :color="link.color"
+              :variant="link.variant"
+              :size="link.size"
+              @click="
+                link.label === 'Получить консультацию'
+                  ? (isModalOpen = true)
+                  : null
+              "
+              :to="link.label !== 'Получить консультацию' ? link.to : undefined"
+            />
+          </div>
+        </template>
+      </UPageHero>
+      
+      <!-- Иконка скролла вниз -->
+      <div class="absolute bottom-16 sm:bottom-32 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
+        <a 
+          href="#section" 
+          class="flex flex-col items-center text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
+          @click.prevent="scrollToSection"
+        >
+          <UIcon name="i-lucide-chevron-down" class="w-10 h-10 sm:w-12 sm:h-12" />
+        </a>
+      </div>
     </div>
 
-    <UPageHero
-      :description="page.description"
-      :ui="{
-        container: 'md:pt-18 lg:pt-20',
-        title: 'max-w-3xl mx-auto',
-      }"
-    >
-      <template #top>
-        <HeroBackground />
-      </template>
-
-      <template #title>
-        <MDC :value="page.title" unwrap="p" />
-      </template>
-
-      <template #links>
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          <UButton
-            v-for="(link, index) in page.hero.links"
-            :key="index"
-            :label="link.label"
-            :icon="link.icon"
-            :trailing="link.trailing"
-            :color="link.color"
-            :variant="link.variant"
-            :size="link.size"
-            @click="
-              link.label === 'Получить консультацию'
-                ? (isModalOpen = true)
-                : null
-            "
-            :to="link.label !== 'Получить консультацию' ? link.to : undefined"
-          />
-        </div>
-      </template>
-    </UPageHero>
-
     <UPageSection
+      id="section"
+      :title="page.section.title"
       :description="page.section.description"
-      :features="page.section.features"
-      orientation="horizontal"
       :ui="{
-        container: 'lg:px-0 2xl:px-20 mx-0 max-w-none md:mr-10',
-        features: 'gap-0',
+        title: 'text-center',
+        description: 'text-center max-w-5xl mx-auto',
       }"
-      reverse
+      class="relative overflow-hidden"
     >
+      <!-- Декоративные фоновые элементы -->
+      <div
+        class="absolute rounded-full left-1/4 top-20 size-[400px] bg-primary/20 blur-[120px] -z-10"
+      />
+      <div
+        class="absolute rounded-full right-1/4 bottom-20 size-[400px] bg-primary/15 blur-[120px] -z-10"
+      />
+
       <template #title>
-        <MDC :value="page.section.title" class="sm:*:leading-11" />
+        <MDC :value="page.section.title" />
       </template>
-      <img
-        :src="page.section.images.desktop"
-        :alt="page.section.title"
-        class="hidden lg:block 2xl:hidden left-0 w-full max-w-2xl"
-      />
-      <img
-        :src="page.section.images.mobile"
-        :alt="page.section.title"
-        class="block lg:hidden 2xl:block 2xl:w-full 2xl:max-w-2xl"
-      />
+
+      <UContainer class="mt-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            v-for="(card, index) in page.section.cards"
+            :key="index"
+            class="group relative"
+          >
+            <!-- Карточка с эффектами -->
+            <div
+              class="relative h-full p-8 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-primary/50 dark:hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/10"
+            >
+              <!-- Градиентный фон при наведении -->
+              <div
+                class="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              />
+
+              <!-- Иконка с градиентом -->
+              <div class="relative mb-6 flex justify-center">
+                <div
+                  class="relative p-4 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-500"
+                >
+                  <div
+                    class="absolute inset-0 rounded-xl bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+                  <UIcon
+                    :name="card.icon"
+                    class="relative w-12 h-12 text-primary group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Заголовок -->
+              <h3
+                class="relative text-xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:text-primary transition-colors duration-300"
+              >
+                {{ card.title }}
+              </h3>
+
+              <!-- Описание -->
+              <p
+                class="relative text-gray-600 dark:text-gray-400 leading-relaxed text-center"
+              >
+                {{ card.description }}
+              </p>
+
+              <!-- Декоративная линия снизу -->
+              <div
+                class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-linear-to-r from-transparent via-primary to-transparent group-hover:w-3/4 transition-all duration-500"
+              />
+            </div>
+          </div>
+        </div>
+      </UContainer>
     </UPageSection>
 
     <USeparator :ui="{ border: 'border-primary/30' }" />
@@ -205,6 +282,59 @@ const isModalOpen = ref(false);
       </UPricingPlans>
     </UPageSection>
 
+    <USeparator :ui="{ border: 'border-primary/30' }" />
+
+    <UPageSection
+      id="reviews"
+      :title="page.reviews.title"
+      :description="page.reviews.description"
+      :ui="{
+        title: 'text-center',
+        description: 'text-center max-w-4xl mx-auto',
+      }"
+      class="relative overflow-hidden py-12"
+    >
+      <!-- Декоративные фоновые элементы -->
+      <div
+        class="absolute rounded-full left-1/4 top-20 size-[500px] bg-primary/10 blur-[150px] -z-10"
+      />
+      <div
+        class="absolute rounded-full right-1/4 bottom-20 size-[500px] bg-primary/15 blur-[150px] -z-10"
+      />
+
+      <template #title>
+        <MDC :value="page.reviews.title" />
+      </template>
+
+      <UContainer>
+        <TestimonialsSlider :testimonials="page.reviews.items" />
+      </UContainer>
+
+      <!-- Статистика -->
+      <UContainer>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">500+</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Реализованных проектов</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">98%</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Довольных клиентов</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">7+</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Лет на рынке</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary mb-2">24/7</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Техподдержка</div>
+          </div>
+        </div>
+      </UContainer>
+    </UPageSection>
+
+    <!-- <USeparator :ui="{ border: 'border-primary/30' }" />
+
     <UPageSection
       id="testimonials"
       :title="page.testimonials.title"
@@ -240,7 +370,7 @@ const isModalOpen = ref(false);
           </UPageCard>
         </UPageColumns>
       </UContainer>
-    </UPageSection>
+    </UPageSection> -->
 
     <USeparator />
 
@@ -293,3 +423,22 @@ const isModalOpen = ref(false);
     <ConsultationModal v-model="isModalOpen" />
   </div>
 </template>
+
+<style scoped>
+.hero-section :deep(h1),
+.hero-section :deep(h2),
+.hero-section :deep(h3),
+.hero-section :deep(p) {
+  color: white !important;
+  hyphens: none;
+}
+
+.hero-section :deep(.text-primary) {
+  color: rgb(var(--color-primary-500)) !important;
+}
+
+.hero-section :deep(h1) {
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  line-height: 1.3;
+}
+</style>
