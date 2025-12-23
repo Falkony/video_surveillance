@@ -11,23 +11,14 @@ const items = computed(() => [
     active: activeHeadings.value.includes("section"),
   },
   {
-    label: "Возможности",
-    to: "#features",
-    active:
-      activeHeadings.value.includes("features") &&
-      !activeHeadings.value.includes("pricing"),
-  },
-  {
     label: "Прайс-лист",
-    to: "#pricing",
-    active: activeHeadings.value.includes("pricing"),
+    to: "#projects",
+    active: activeHeadings.value.includes("projects"),
   },
   {
     label: "Отзывы",
-    to: "#testimonials",
-    active:
-      activeHeadings.value.includes("testimonials") &&
-      !activeHeadings.value.includes("pricing"),
+    to: "#reviews",
+    active: activeHeadings.value.includes("reviews"),
   },
 ]);
 
@@ -35,9 +26,8 @@ nuxtApp.hooks.hookOnce("page:finish", () => {
   updateHeadings(
     [
       document.querySelector("#section"),
-      document.querySelector("#features"),
-      document.querySelector("#pricing"),
-      document.querySelector("#testimonials"),
+      document.querySelector("#projects"),
+      document.querySelector("#reviews"),
     ].filter(Boolean) as Element[],
   );
 });
@@ -66,6 +56,18 @@ function openModal() {
     <template #body>
       <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
       <UButton class="mt-4" label="Консультация" variant="subtle" block @click="openModal" />
+      
+      <!-- Копирайт и юридическая информация -->
+      <div class="absolute bottom-0 left-0 right-0 pt-6 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+        <div class="flex flex-col items-center gap-2 text-center px-4 pb-4">
+          <AppCopyright />
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            ИП Лебедев Андрей Владимирович<br />
+            ИНН 526098859192<br />
+            ОГРН 325527500022552
+          </p>
+        </div>
+      </div>
     </template>
   </UHeader>
 

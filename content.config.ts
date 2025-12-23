@@ -44,7 +44,7 @@ export const collections = {
       }),
       features: createBaseSchema().extend({
         features: z.array(createFeatureSchema())
-      }),
+      }).optional(),
       steps: createBaseSchema().extend({
         items: z.array(createFeatureSchema().extend({
           image: z.object({
@@ -52,7 +52,7 @@ export const collections = {
             dark: z.string().editor({ input: 'media' })
           }).optional()
         }))
-      }),
+      }).optional(),
       pricing: createBaseSchema().extend({
         plans: z.array(
           createBaseSchema().extend({
@@ -64,7 +64,7 @@ export const collections = {
             billing_cycle: z.string().nonempty()
           })
         )
-      }),
+      }).optional(),
       reviews: createBaseSchema().extend({
         items: z.array(
           z.object({
@@ -93,6 +93,30 @@ export const collections = {
             })
           }))
       }),
+      projects: createBaseSchema().extend({
+        gallery: z.object({
+          title: z.string().nonempty(),
+          subtitle: z.string().nonempty(),
+          images: z.number().int()
+        }),
+        price: z.object({
+          title: z.string().nonempty(),
+          subtitle: z.string().nonempty(),
+          categories: z.array(
+            z.object({
+              name: z.string().nonempty(),
+              icon: z.string().editor({ input: 'icon' }),
+              items: z.array(
+                z.object({
+                  service: z.string().nonempty(),
+                  price: z.string().nonempty()
+                })
+              )
+            })
+          ),
+          note: z.string().optional()
+        })
+      }).optional(),
       cta: createBaseSchema().extend({
         links: z.array(createLinkSchema())
       })

@@ -40,6 +40,10 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  ui: {
+    fonts: false
+  },
+
   runtimeConfig: {
     telegramBotToken: process.env.NUXT_TELEGRAM_BOT_TOKEN,
     telegramChatId: process.env.NUXT_TELEGRAM_CHAT_ID,

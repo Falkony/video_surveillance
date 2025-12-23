@@ -3,6 +3,12 @@ export default defineAppConfig({
     colors: {
       primary: 'blue',
       neutral: 'neutral'
+    },
+    fonts: {
+      defaults: {
+        weights: [],
+        styles: []
+      }
     }
   }
 })

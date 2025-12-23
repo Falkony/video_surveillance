@@ -2,6 +2,7 @@
 const { data: page } = await useAsyncData("index", () =>
   queryCollection("content").first(),
 );
+
 if (!page.value) {
   throw createError({
     statusCode: 404,
@@ -18,6 +19,7 @@ useSeoMeta({
 });
 
 const isModalOpen = ref(false);
+const showScrollTop = ref(false);
 
 const scrollToSection = () => {
   const section = document.getElementById('section');
@@ -25,11 +27,25 @@ const scrollToSection = () => {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+onMounted(() => {
+  const handleScroll = () => {
+    showScrollTop.value = window.scrollY > 300;
+  };
+  window.addEventListener('scroll', handleScroll);
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+  });
+});
 </script>
 
 <template>
   <div v-if="page" class="relative overflow-x-hidden">
-    <div class="relative overflow-x-hidden hero-section min-h-screen flex items-center justify-center">
+    <div class="relative overflow-x-hidden hero-section flex items-center justify-center">
       <HeroBackground />
       
       <UPageHero
@@ -61,35 +77,32 @@ const scrollToSection = () => {
         <template #links>
           <div class="flex flex-wrap items-center justify-center gap-4 animate-fade-in-up opacity-0" style="animation-delay: 0.8s;">
             <UButton
-              v-for="(link, index) in page.hero.links"
-              :key="index"
-              :label="link.label"
-              :icon="link.icon"
-              :trailing="link.trailing"
-              :color="link.color"
-              :variant="link.variant"
-              :size="link.size"
-              @click="
-                link.label === 'Получить консультацию'
-                  ? (isModalOpen = true)
-                  : null
-              "
-              :to="link.label !== 'Получить консультацию' ? link.to : undefined"
+              label="Получить консультацию"
+              icon="i-lucide-arrow-right"
+              trailing
+              color="primary"
+              size="xl"
+              @click="isModalOpen = true"
+            />
+            <UButton
+              label="Наши проекты"
+              icon="i-lucide-camera"
+              size="xl"
+              color="neutral"
+              variant="outline"
+              to="#projects"
+            />
+            <UButton
+              label="Прайс-лист"
+              icon="i-lucide-file-text"
+              size="xl"
+              color="neutral"
+              variant="outline"
+              to="#projects"
             />
           </div>
         </template>
       </UPageHero>
-      
-      <!-- Иконка скролла вниз -->
-      <div class="absolute bottom-16 sm:bottom-32 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <a 
-          href="#section" 
-          class="flex flex-col items-center text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-          @click.prevent="scrollToSection"
-        >
-          <UIcon name="i-lucide-chevron-down" class="w-10 h-10 sm:w-12 sm:h-12" />
-        </a>
-      </div>
     </div>
 
     <UPageSection
@@ -169,10 +182,11 @@ const scrollToSection = () => {
       </UContainer>
     </UPageSection>
 
-    <USeparator :ui="{ border: 'border-primary/30' }" />
+    <!-- <USeparator :ui="{ border: 'border-primary/30' }" />
 
     <UPageSection
       id="features"
+      v-if="page.features"
       :description="page.features.description"
       :features="page.features.features"
       :ui="{
@@ -199,10 +213,11 @@ const scrollToSection = () => {
       </template>
     </UPageSection>
 
-    <USeparator :ui="{ border: 'border-primary/30' }" />
+    <USeparator :ui="{ border: 'border-primary/30' }" /> -->
 
-    <UPageSection
+    <!-- <UPageSection
       id="steps"
+      v-if="page.steps"
       :description="page.steps.description"
       class="relative overflow-hidden"
     >
@@ -246,6 +261,7 @@ const scrollToSection = () => {
 
     <UPageSection
       id="pricing"
+      v-if="page.pricing"
       class="mb-32 overflow-hidden"
       :title="page.pricing.title"
       :description="page.pricing.description"
@@ -280,7 +296,54 @@ const scrollToSection = () => {
           :button="plan.button"
         />
       </UPricingPlans>
-    </UPageSection>
+    </UPageSection> -->
+
+    <USeparator :ui="{ border: 'border-primary/30' }" />
+
+    <!-- Секция с проектами и прайсами на всю ширину -->
+    <div
+      v-if="page.projects"
+      id="projects"
+      class="relative w-full py-24 bg-gray-50 dark:bg-gray-950"
+    >
+      <!-- Декоративные фоновые элементы -->
+      <div
+        class="absolute rounded-full left-1/3 top-1/4 size-[400px] bg-primary/10 blur-[150px] -z-10"
+      />
+      <div
+        class="absolute rounded-full right-1/3 bottom-1/4 size-[400px] bg-primary/15 blur-[150px] -z-10"
+      />
+
+      <!-- Заголовок секции -->
+      <div class="text-center mb-16 px-4">
+        <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <MDC :value="page.projects.title" unwrap="p" class="inline" />
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-400 max-w-4xl mx-auto">
+          {{ page.projects.description }}
+        </p>
+      </div>
+
+      <!-- Контент на всю ширину -->
+      <div class="w-full px-6 sm:px-8 lg:px-12 xl:px-16">
+        <!-- Grid разбитый на 2 колонки -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 max-w-[2000px] mx-auto">
+          <!-- Левая часть - Галерея проектов -->
+          <div class="relative">
+            <ProjectsGallery />
+          </div>
+
+          <!-- Правая часть - Прайс-лист -->
+          <div class="relative">
+            <PriceList
+              :categories="page.projects.price.categories"
+              :note="page.projects.price.note"
+              @open-modal="isModalOpen = true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
     <USeparator :ui="{ border: 'border-primary/30' }" />
 
@@ -407,13 +470,6 @@ const scrollToSection = () => {
             size="xl"
             @click="isModalOpen = true"
           />
-          <UButton
-            label="Наши контакты"
-            icon="i-lucide-mail"
-            variant="subtle"
-            size="xl"
-            to="#pricing"
-          />
         </div>
       </template>
 
@@ -421,6 +477,25 @@ const scrollToSection = () => {
     </UPageCTA>
 
     <ConsultationModal v-model="isModalOpen" />
+    
+    <!-- Кнопка "Наверх" -->
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0 translate-y-4"
+      enter-to-class="opacity-100 translate-y-0"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 translate-y-4"
+    >
+      <button
+        v-if="showScrollTop"
+        @click="scrollToTop"
+        class="hidden md:flex fixed bottom-8 right-8 z-50 items-center justify-center w-12 h-12 bg-primary hover:bg-primary-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 cursor-pointer"
+        aria-label="Наверх"
+      >
+        <UIcon name="i-lucide-arrow-up" class="w-6 h-6" />
+      </button>
+    </Transition>
   </div>
 </template>
 

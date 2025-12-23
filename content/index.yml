@@ -37,92 +37,92 @@ section:
     - title: Система цифровой и аналоговой домофонии
       icon: i-lucide-phone-call
       description: 'IP (цифровая) — высокое качество изображения и звука, возможность подключения нескольких абонентов, удаленный доступ и связь с охранными службами, интеграция в системы умного дома, гибкость настройки. Аналоговая — простота установки и низкая стоимость для базовых задач.'
-features:
-  title: Полный контроль над [безопасностью]{.text-primary}
-  description: Современные технологии видеонаблюдения для защиты вашего дома и бизнеса.
-  features:
-    - title: IP-камеры высокого разрешения
-      description: Камеры с разрешением до 4K и ночным видением обеспечивают кристально чистое изображение в любых условиях освещения.
-      icon: i-lucide-camera
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-    - title: Облачное хранилище
-      description: Автоматическое резервное копирование записей в облако. Ваши данные всегда в безопасности и доступны из любой точки мира.
-      icon: i-lucide-cloud
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-    - title: Мобильное приложение
-      description: Просматривайте видео в реальном времени с вашего смартфона или планшета. Управляйте камерами удаленно.
-      icon: i-lucide-smartphone
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-    - title: Детекция движения
-      description: Умная система распознавания движения с мгновенными push-уведомлениями при обнаружении активности.
-      icon: i-lucide-activity
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-    - title: Распознавание лиц
-      description: Интеллектуальная система распознавания лиц для идентификации посетителей и контроля доступа на территорию.
-      icon: i-lucide-scan-face
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-    - title: Круглосуточная запись
-      description: Непрерывная запись видео 24/7 с возможностью быстрого поиска нужных моментов по дате и времени.
-      icon: i-lucide-video
-      ui:
-        leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
-steps:
-  title: Установка системы в [3 этапа]{.text-primary}
-  description: Профессиональный монтаж и настройка системы видеонаблюдения под ключ.
-  items:
-    - title: Консультация и проектирование
-      description: Бесплатный выезд специалиста на объект для оценки и составления оптимального плана размещения камер. Подбор оборудования под ваши задачи и бюджет.
-      image:
-        light: '/images/light/connect.svg'
-        dark: '/images/dark/connect.svg'
-    - title: Установка и настройка
-      description: Профессиональный монтаж камер, прокладка кабелей и настройка оборудования. Установка занимает от 1 до 3 дней в зависимости от объема работ.
-      image:
-        light: '/images/light/optimize.svg'
-        dark: '/images/dark/optimize.svg'
-    - title: Обучение и поддержка
-      description: Подробный инструктаж по работе с системой и мобильным приложением. Круглосуточная техническая поддержка и бесплатное обслуживание в течение года.
-      image:
-        light: '/images/light/track.svg'
-        dark: '/images/dark/track.svg'
-pricing:
-  title: Выберите оптимальный [тариф]{.text-primary}
-  description: Гибкие тарифные планы для дома и бизнеса. Профессиональное оборудование, установка и обслуживание по доступным ценам.
-  plans:
-    - title: Базовый
-      description: Идеально подходит для квартир и небольших домов.
-      price: от 25 000 ₽
-      features:
-        - 2-4 IP-камеры с разрешением Full HD
-        - Видеорегистратор на 1 ТБ
-        - Удаленный доступ через мобильное приложение
-        - Детекция движения с уведомлениями
-        - Установка и настройка под ключ
-        - Гарантия 1 год и техподдержка
-      button:
-        label: Заказать
-        color: neutral
-        variant: outline
-        to: '#'
-    - title: Профессиональный
-      description: Для коттеджей, офисов и коммерческих объектов.
-      price: от 65 000 ₽
-      features:
-        - 6-16 IP-камер с разрешением 4K
-        - Видеорегистратор на 4 ТБ с RAID
-        - Распознавание лиц и номеров автомобилей
-        - Облачное резервное копирование
-        - Интеграция с системой контроля доступа
-        - Расширенная гарантия 2 года 24/7 поддержка
-      button:
-        label: Заказать
-        variant: subtle
-        to: '#'
+# features:
+#   title: Полный контроль над [безопасностью]{.text-primary}
+#   description: Современные технологии видеонаблюдения для защиты вашего дома и бизнеса.
+#   features:
+#     - title: IP-камеры высокого разрешения
+#       description: Камеры с разрешением до 4K и ночным видением обеспечивают кристально чистое изображение в любых условиях освещения.
+#       icon: i-lucide-camera
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+#     - title: Облачное хранилище
+#       description: Автоматическое резервное копирование записей в облако. Ваши данные всегда в безопасности и доступны из любой точки мира.
+#       icon: i-lucide-cloud
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+#     - title: Мобильное приложение
+#       description: Просматривайте видео в реальном времени с вашего смартфона или планшета. Управляйте камерами удаленно.
+#       icon: i-lucide-smartphone
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+#     - title: Детекция движения
+#       description: Умная система распознавания движения с мгновенными push-уведомлениями при обнаружении активности.
+#       icon: i-lucide-activity
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+#     - title: Распознавание лиц
+#       description: Интеллектуальная система распознавания лиц для идентификации посетителей и контроля доступа на территорию.
+#       icon: i-lucide-scan-face
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+#     - title: Круглосуточная запись
+#       description: Непрерывная запись видео 24/7 с возможностью быстрого поиска нужных моментов по дате и времени.
+#       icon: i-lucide-video
+#       ui:
+#         leading: bg-accented/50 p-2 rounded-md border border-muted border-dashed
+# steps:
+#   title: Установка системы в [3 этапа]{.text-primary}
+#   description: Профессиональный монтаж и настройка системы видеонаблюдения под ключ.
+#   items:
+#     - title: Консультация и проектирование
+#       description: Бесплатный выезд специалиста на объект для оценки и составления оптимального плана размещения камер. Подбор оборудования под ваши задачи и бюджет.
+#       image:
+#         light: '/images/light/connect.svg'
+#         dark: '/images/dark/connect.svg'
+#     - title: Установка и настройка
+#       description: Профессиональный монтаж камер, прокладка кабелей и настройка оборудования. Установка занимает от 1 до 3 дней в зависимости от объема работ.
+#       image:
+#         light: '/images/light/optimize.svg'
+#         dark: '/images/dark/optimize.svg'
+#     - title: Обучение и поддержка
+#       description: Подробный инструктаж по работе с системой и мобильным приложением. Круглосуточная техническая поддержка и бесплатное обслуживание в течение года.
+#       image:
+#         light: '/images/light/track.svg'
+#         dark: '/images/dark/track.svg'
+# pricing:
+#   title: Выберите оптимальный [тариф]{.text-primary}
+#   description: Гибкие тарифные планы для дома и бизнеса. Профессиональное оборудование, установка и обслуживание по доступным ценам.
+#   plans:
+#     - title: Базовый
+#       description: Идеально подходит для квартир и небольших домов.
+#       price: от 25 000 ₽
+#       features:
+#         - 2-4 IP-камеры с разрешением Full HD
+#         - Видеорегистратор на 1 ТБ
+#         - Удаленный доступ через мобильное приложение
+#         - Детекция движения с уведомлениями
+#         - Установка и настройка под ключ
+#         - Гарантия 1 год и техподдержка
+#       button:
+#         label: Заказать
+#         color: neutral
+#         variant: outline
+#         to: '#'
+#     - title: Профессиональный
+#       description: Для коттеджей, офисов и коммерческих объектов.
+#       price: от 65 000 ₽
+#       features:
+#         - 6-16 IP-камер с разрешением 4K
+#         - Видеорегистратор на 4 ТБ с RAID
+#         - Распознавание лиц и номеров автомобилей
+#         - Облачное резервное копирование
+#         - Интеграция с системой контроля доступа
+#         - Расширенная гарантия 2 года 24/7 поддержка
+#       button:
+#         label: Заказать
+#         variant: subtle
+#         to: '#'
 reviews:
   title: Что говорят [наши клиенты]{.text-primary}
   description: Реальные отзывы от тех, кто уже доверил нам безопасность своего имущества. Более 500 успешно реализованных проектов.
@@ -186,6 +186,66 @@ testimonials:
         name: 'Александр'
         description: 'Монтаж системы видеонаблюдения'
         target: _blank
+projects:
+  title: Наши [работы и цены]{.text-primary}
+  description: Посмотрите примеры наших проектов и ознакомьтесь с прайс-листом на услуги монтажа и настройки систем безопасности.
+  gallery:
+    title: Примеры работ
+    subtitle: Более 500 реализованных проектов
+    images: 50
+  price:
+    title: Прайс-лист
+    subtitle: Прозрачные цены без скрытых платежей
+    categories:
+      - name: Монтаж камер
+        icon: i-lucide-camera
+        items:
+          - service: Монтаж камеры внутренней до 2.5м
+            price: от 1.500 ₽
+          - service: Монтаж камеры внутренней свыше 2.5м
+            price: от 2.000 ₽
+          - service: Монтаж камеры уличной до 4м
+            price: от 2.500 ₽
+          - service: Монтаж камеры уличной свыше 4м
+            price: от 3.500 ₽
+          - service: Демонтаж камер
+            price: от 800 ₽
+      - name: Прокладка кабельных линий
+        icon: i-lucide-cable
+        items:
+          - service: Прокладка линии FTP/UTP cat 5e до 30м
+            price: от 2.500 ₽
+          - service: Прокладка линии FTP/UTP cat 5e свыше 30м
+            price: от 70 ₽/м.п
+          - service: Прокладка линии в гофре
+            price: от 30 ₽/м.п
+          - service: Прокладка линии в кабель-канале
+            price: от 80 ₽/м.п
+          - service: Демонтаж линии
+            price: от 600 ₽
+      - name: Системы домофонии
+        icon: i-lucide-phone-call
+        items:
+          - service: Монтаж вызывной панели
+            price: от 900 ₽
+          - service: Монтаж монитора домофона
+            price: от 1.200 ₽
+          - service: Монтаж электромагнитного замка
+            price: от 1.400 ₽
+          - service: Монтаж электромеханического замка
+            price: от 2.000 ₽
+          - service: Монтаж кнопки выхода
+            price: 500 ₽
+      - name: Диагностика и настройка
+        icon: i-lucide-settings
+        items:
+          - service: Диагностика неисправности оборудования
+            price: от 1.000 ₽
+          - service: Пусконаладочные работы видеонаблюдения
+            price: от 3.000 ₽
+          - service: Пусконаладочные работы домофонии
+            price: от 3.000 ₽
+    note: По остальным вопросам заполните форму для обратной связи.
 cta:
   title: Готовы защитить свой дом или бизнес?
   description: Получите бесплатную консультацию специалиста и расчет стоимости системы видеонаблюдения для вашего объекта.
@@ -193,7 +253,3 @@ cta:
     - label: Получить консультацию
       to: '#'
       trailingIcon: i-lucide-phone
-    - label: Наши контакты
-      to: '#'
-      variant: subtle
-      icon: i-lucide-mail
