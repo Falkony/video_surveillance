@@ -99,7 +99,7 @@ onMounted(() => {
         <template #title>
           <div class="animate-fade-in-up opacity-0" style="animation-delay: 0.2s;">
             <div class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-              <span class="bg-linear-to-r from-white via-blue-100 to-primary-300 bg-clip-text text-transparent drop-shadow-2xl">
+              <span class="bg-gradient-to-r from-white via-blue-100 to-primary-300 bg-clip-text text-transparent drop-shadow-2xl">
                 <MDC :value="page.title" unwrap="p" class="inline" />
               </span>
             </div>
@@ -179,13 +179,13 @@ onMounted(() => {
             >
               <!-- Градиентный фон при наведении -->
               <div
-                class="absolute inset-0 rounded-2xl bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                class="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               />
 
               <!-- Иконка с градиентом -->
               <div class="relative mb-6 flex justify-center">
                 <div
-                  class="relative p-4 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-500"
+                  class="relative p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-500"
                 >
                   <div
                     class="absolute inset-0 rounded-xl bg-primary/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -213,7 +213,7 @@ onMounted(() => {
 
               <!-- Декоративная линия снизу -->
               <div
-                class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-linear-to-r from-transparent via-primary to-transparent group-hover:w-3/4 transition-all duration-500"
+                class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent group-hover:w-3/4 transition-all duration-500"
               />
             </div>
           </div>
@@ -387,6 +387,7 @@ onMounted(() => {
     <USeparator :ui="{ border: 'border-primary/30' }" />
 
     <UPageSection
+      v-if="page.reviews"
       id="reviews"
       :title="page.reviews.title"
       :description="page.reviews.description"
@@ -409,7 +410,7 @@ onMounted(() => {
       </template>
 
       <UContainer>
-        <TestimonialsSlider :testimonials="page.reviews.items" />
+        <TestimonialsSlider v-if="page.reviews.items" :testimonials="page.reviews.items" />
       </UContainer>
 
       <!-- Статистика -->
