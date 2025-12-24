@@ -122,13 +122,11 @@ onUnmounted(() => {
             @click="openLightbox(index)"
           >
             <div class="aspect-[3/2] overflow-hidden">
-              <NuxtImg
+              <img
                 :src="image"
-                :alt="`Пример работы ${index + 1}`"
-                class="w-full h-full object-cover"
+                :alt="`Пример работы по установке видеонаблюдения ${index + 1}`"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 loading="lazy"
-                format="webp"
-                quality="85"
               />
             </div>
             
@@ -194,7 +192,7 @@ onUnmounted(() => {
               <img
                 v-if="isLightboxOpen"
                 :src="images[currentImageIndex]"
-                :alt="`Пример работы ${currentImageIndex + 1}`"
+                :alt="`Пример работы по установке видеонаблюдения ${currentImageIndex + 1} - увеличенное изображение`"
                 class="w-full h-auto max-h-[70vh] object-contain rounded-lg"
                 loading="eager"
               />

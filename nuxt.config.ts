@@ -25,10 +25,14 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: [
-        '/'
-      ]
-    }
+      routes: ['/'],
+      crawlLinks: false,
+      failOnError: false
+    },
+    experimental: {
+      wasm: false
+    },
+    logLevel: 3
   },
 
   eslint: {
@@ -40,10 +44,23 @@ export default defineNuxtConfig({
     }
   },
 
-  ssr: true,
+  ssr: false,  // временно отключен для отладки
 
   ui: {
     fonts: false
+  },
+
+  image: {
+    quality: 80,
+    format: ['webp'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    }
   },
 
   app: {
@@ -78,12 +95,50 @@ export default defineNuxtConfig({
   },
 
   robots: {
-    allow: '/',
+    disallow: ['/api/'],
     sitemap: '/sitemap.xml'
   },
 
   sitemap: {
     sources: ['/api/__sitemap__/urls'],
-    xsl: false
+    xsl: false,
+    cacheMaxAgeSeconds: 3600
+  },
+
+  experimental: {
+    payloadExtraction: false
+  },
+
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              if (id.includes('swiper')) {
+                return 'swiper';
+              }
+              if (id.includes('@nuxt')) {
+                return 'nuxt-vendor';
+              }
+              return 'vendor';
+            }
+          }
+        }
+      }
+    },
+    logLevel: 'warn',
+    server: {
+      fs: {
+        strict: false
+      }
+    }
+  },
+
+  // Отключаем deprecation warnings
+  hooks: {
+    ready: () => {
+      process.removeAllListeners('warning');
+    }
   }
 })
