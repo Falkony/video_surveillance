@@ -113,25 +113,19 @@ export default defineNuxtConfig({
     build: {
       rollupOptions: {
         output: {
-          manualChunks: (id) => {
-            if (id.includes('node_modules')) {
-              if (id.includes('swiper')) {
-                return 'swiper';
-              }
-              if (id.includes('@nuxt')) {
-                return 'nuxt-vendor';
-              }
-              return 'vendor';
-            }
-          }
+          manualChunks: undefined  // Отключаем ручное разделение
         }
-      }
+      },
+      chunkSizeWarningLimit: 1000
     },
     logLevel: 'warn',
     server: {
       fs: {
         strict: false
       }
+    },
+    optimizeDeps: {
+      include: ['swiper', 'swiper/vue']
     }
   },
 

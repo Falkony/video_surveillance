@@ -4,7 +4,8 @@ const metrikaId = config.public.yandexMetrikaId;
 
 // Инициализация Яндекс.Метрики только на клиенте
 onMounted(() => {
-  if (!metrikaId || !import.meta.client) return;
+  if (!metrikaId) return;
+  if (typeof window === 'undefined') return;
 
   // Загрузка скрипта Яндекс.Метрики
   const script = document.createElement('script');

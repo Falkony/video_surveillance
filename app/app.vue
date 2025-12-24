@@ -56,7 +56,5 @@ useSeoMeta({
     </UMain>
 
     <AppFooter />
-    
-    <YandexMetrika />
   </UApp>
 </template>
