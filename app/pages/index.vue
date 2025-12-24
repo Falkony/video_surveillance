@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// @ts-ignore
 const { data: page } = await useAsyncData("index", () =>
   queryCollection("content").first(),
 );
@@ -11,11 +12,49 @@ if (!page.value) {
   });
 }
 
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl || 'https://nnvss.ru';
+
+// SEO мета-теги
+// @ts-ignore
 useSeoMeta({
   title: page.value.seo?.title || page.value.title,
   ogTitle: page.value.seo?.title || page.value.title,
   description: page.value.seo?.description || page.value.description,
   ogDescription: page.value.seo?.description || page.value.description,
+  ogUrl: siteUrl,
+  keywords: 'видеонаблюдение, установка камер, системы безопасности, СКУД, домофоны, Нижний Новгород, IP камеры, монтаж видеонаблюдения, охранные системы',
+});
+
+// Канонический URL
+useHead({
+  link: [
+    { rel: 'canonical', href: siteUrl }
+  ]
+});
+
+// Структурированные данные Schema.org
+const { organizationSchema, websiteSchema, breadcrumbSchema, serviceSchema } = useSchemaOrg();
+
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(organizationSchema)
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(websiteSchema)
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(breadcrumbSchema)
+    },
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify(serviceSchema)
+    }
+  ]
 });
 
 const isModalOpen = ref(false);
@@ -60,7 +99,7 @@ onMounted(() => {
         <template #title>
           <div class="animate-fade-in-up opacity-0" style="animation-delay: 0.2s;">
             <div class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-              <span class="bg-gradient-to-r from-white via-blue-100 to-primary-300 bg-clip-text text-transparent drop-shadow-2xl">
+              <span class="bg-linear-to-r from-white via-blue-100 to-primary-300 bg-clip-text text-transparent drop-shadow-2xl">
                 <MDC :value="page.title" unwrap="p" class="inline" />
               </span>
             </div>

@@ -1,0 +1,27 @@
+# robots.txt для nnvss.ru
+User-agent: *
+Allow: /
+
+# Запрет для API эндпоинтов
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://nnvss.ru/sitemap.xml
+
+# Основные поисковые роботы
+User-agent: Yandex
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Запрет для вредоносных ботов
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+

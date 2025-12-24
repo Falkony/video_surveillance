@@ -4,7 +4,9 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/ui',
-    '@nuxt/content'
+    '@nuxt/content',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
   ],
 
   devtools: {
@@ -38,10 +40,27 @@ export default defineNuxtConfig({
     }
   },
 
-  ssr: false,
+  ssr: true,
 
   ui: {
     fonts: false
+  },
+
+  app: {
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        lang: 'ru'
+      }
+    }
+  },
+
+  site: {
+    url: process.env.NUXT_PUBLIC_SITE_URL || 'https://nnvss.ru',
+    name: 'Видеонаблюдение в Нижнем Новгороде',
+    description: 'Профессиональные системы видеонаблюдения для дома и бизнеса. Установка, настройка и обслуживание под ключ.',
+    defaultLocale: 'ru'
   },
 
   runtimeConfig: {
@@ -53,7 +72,18 @@ export default defineNuxtConfig({
       email: process.env.NUXT_PUBLIC_EMAIL,
       telegram: process.env.NUXT_PUBLIC_TELEGRAM,
       siteName: process.env.NUXT_PUBLIC_SITE_NAME,
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      yandexMetrikaId: process.env.NUXT_PUBLIC_YANDEX_METRIKA_ID
     }
+  },
+
+  robots: {
+    allow: '/',
+    sitemap: '/sitemap.xml'
+  },
+
+  sitemap: {
+    sources: ['/api/__sitemap__/urls'],
+    xsl: false
   }
 })

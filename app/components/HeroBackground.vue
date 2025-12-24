@@ -39,7 +39,7 @@ onMounted(() => {
       <div class="absolute inset-0 w-full h-full" :style="{ transform: `translateY(${parallaxOffset}px)` }">
         <img 
           src="/images/background.jpg" 
-          alt="Background" 
+          alt="Профессиональные системы видеонаблюдения и безопасности" 
           class="w-full h-full object-cover scale-110"
         />
       </div>
