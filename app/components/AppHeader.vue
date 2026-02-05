@@ -49,8 +49,6 @@ function openModal() {
       <UNavigationMenu :items="items" variant="link" class="hidden lg:block" />
 
       <UButton label="Консультация" variant="subtle" class="hidden lg:block" @click="openModal" />
-
-      <UColorModeButton />
     </template>
 
     <template #body>

@@ -434,6 +434,19 @@ onMounted(() => {
           </div>
         </div>
       </UContainer>
+
+      <!-- Сертификаты Dahua -->
+      <UContainer class="mt-16 pt-16 border-t border-gray-200 dark:border-gray-800">
+        <div class="text-center mb-10">
+          <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Сертифицированные специалисты <span class="text-primary">Dahua</span>
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Наши инженеры прошли официальную сертификацию Dahua Technology и имеют подтверждённую квалификацию для работы с оборудованием мирового класса
+          </p>
+        </div>
+        <CertificatesGallery />
+      </UContainer>
     </UPageSection>
 
     <!-- <USeparator :ui="{ border: 'border-primary/30' }" />

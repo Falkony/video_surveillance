@@ -1,10 +1,40 @@
 <script setup lang="ts">
+import { MaskInput } from 'maska'
+
 const isOpen = defineModel<boolean>({ default: false })
 
 const form = reactive({
   name: '',
   phone: '',
-  message: ''
+  message: '',
+  consent: false
+})
+
+const phoneInputRef = ref<{ $el: HTMLElement } | null>(null)
+let maskInstance: MaskInput | null = null
+
+function initMask() {
+  if (phoneInputRef.value?.$el) {
+    const input = phoneInputRef.value.$el.querySelector('input')
+    if (input && !maskInstance) {
+      maskInstance = new MaskInput(input, { mask: '+7(###)-###-##-##', eager: true })
+    }
+  }
+}
+
+watch(isOpen, (open) => {
+  if (open) {
+    nextTick(() => {
+      setTimeout(initMask, 50) // Небольшая задержка для рендера модалки
+    })
+  } else {
+    maskInstance?.destroy()
+    maskInstance = null
+  }
+})
+
+onUnmounted(() => {
+  maskInstance?.destroy()
 })
 
 const loading = ref(false)
@@ -14,9 +44,11 @@ const validate = (state: any) => {
   const errors = []
   if (!state.name) errors.push({ path: 'name', message: 'Имя обязательно для заполнения' })
   if (!state.phone) errors.push({ path: 'phone', message: 'Телефон обязателен для заполнения' })
-  if (state.phone && !/^[\d\s\+\-\(\)]+$/.test(state.phone)) {
-    errors.push({ path: 'phone', message: 'Некорректный формат телефона' })
+  // Проверяем, что введены все 11 цифр (полный номер в формате +7(xxx)-xxx-xx-xx)
+  if (state.phone && state.phone.replace(/\D/g, '').length < 11) {
+    errors.push({ path: 'phone', message: 'Введите полный номер телефона' })
   }
+  if (!state.consent) errors.push({ path: 'consent', message: 'Необходимо дать согласие на обработку данных' })
   return errors
 }
 
@@ -44,6 +76,7 @@ async function onSubmit(close: () => void) {
     form.name = ''
     form.phone = ''
     form.message = ''
+    form.consent = false
     close()
   } catch (error: any) {
     console.error('Ошибка отправки:', error)
@@ -82,8 +115,9 @@ async function onSubmit(close: () => void) {
           required
         >
           <UInput
+            ref="phoneInputRef"
             v-model="form.phone"
-            placeholder="+7 (999) 123-45-67"
+            placeholder="+7(___)-___-__-__"
             type="tel"
             size="lg"
             :disabled="loading"
@@ -104,6 +138,20 @@ async function onSubmit(close: () => void) {
             :disabled="loading"
             class="w-full"
           />
+        </UFormField>
+
+        <UFormField name="consent">
+          <UCheckbox
+            v-model="form.consent"
+            :disabled="loading"
+          >
+            <template #label>
+              <span class="text-sm">
+                Я даю согласие на обработку перс. данных в соответствии с
+                <NuxtLink to="/privacy" class="text-primary-500 hover:text-primary-600 underline">политикой конфиденциальности</NuxtLink>
+              </span>
+            </template>
+          </UCheckbox>
         </UFormField>
       </UForm>
     </template>
@@ -127,6 +175,7 @@ async function onSubmit(close: () => void) {
           size="lg"
           block
           :loading="loading"
+          :disabled="!form.consent"
           @click="onSubmit(close)"
         >
           Отправить

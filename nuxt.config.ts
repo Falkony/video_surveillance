@@ -46,6 +46,10 @@ export default defineNuxtConfig({
 
   ssr: false,  // временно отключен для отладки
 
+  colorMode: {
+    preference: 'dark'
+  },
+
   ui: {
     fonts: false
   },
@@ -69,7 +73,10 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: {
         lang: 'ru'
-      }
+      },
+      meta: [
+        { name: 'yandex-verification', content: 'ff62661255bc9bec' }
+      ]
     }
   },
 

@@ -19,6 +19,10 @@ const columns = [
         label: "О компании",
         to: "#section",
       },
+      {
+        label: "Политика",
+        to: "/privacy",
+      },
     ],
   },
   {
@@ -35,8 +39,8 @@ const columns = [
         icon: "i-lucide-mail",
       },
       {
-        label: "@summer_andy",
-        to: "https://t.me/summer_andy",
+        label: "@vssnnvideo",
+        to: "https://t.me/vssnnvideo",
         icon: "i-simple-icons-telegram",
         target: "_blank",
       },

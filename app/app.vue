@@ -19,6 +19,7 @@ useHead({
     { name: "robots", content: "index, follow" },
     { name: "googlebot", content: "index, follow" },
     { name: "yandex", content: "index, follow" },
+    { name: "yandex-verification", content: "fa0265be754c1101" },
     { name: "geo.region", content: "RU-NIZ" },
     { name: "geo.placename", content: "Нижний Новгород" },
     { name: "geo.position", content: "56.326887;44.005986" },
@@ -49,12 +50,14 @@ useSeoMeta({
 
 <template>
   <UApp :toaster="{ expand: false }">
-    <AppHeader />
+    <div class="min-h-screen flex flex-col">
+      <AppHeader />
 
-    <UMain>
-      <NuxtPage />
-    </UMain>
+      <main class="flex-1 flex flex-col">
+        <NuxtPage class="flex-1 flex flex-col" />
+      </main>
 
-    <AppFooter />
+      <AppFooter class="flex-shrink-0" />
+    </div>
   </UApp>
 </template>
