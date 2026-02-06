@@ -147,7 +147,7 @@ async function onSubmit(close: () => void) {
           >
             <template #label>
               <span class="text-sm">
-                Я даю согласие на обработку перс. данных в соответствии с
+                Я даю согласие на обработку персональных данных в соответствии с
                 <NuxtLink to="/privacy" class="text-primary-500 hover:text-primary-600 underline">политикой конфиденциальности</NuxtLink>
               </span>
             </template>

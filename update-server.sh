@@ -11,7 +11,7 @@ pm2 stop video-surveillance
 
 # Получить последние изменения
 echo "📥 Получение последних изменений..."
-git pull origin main
+git pull origin master
 
 # Установить новые зависимости
 echo "📦 Установка зависимостей..."
