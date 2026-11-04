@@ -1,0 +1,104 @@
+---
+import { Icon } from 'astro-icon/components'
+import { priceList } from '~/data/landing'
+---
+
+<div id="price" class="relative h-full scroll-mt-24">
+  <div class="mb-8 flex min-h-[44px] items-end">
+    <div>
+      <h3 class="mb-2 text-2xl font-bold text-white sm:text-3xl">Прайс-лист на монтаж</h3>
+      <p class="text-neutral-400">Прозрачные цены без скрытых платежей</p>
+    </div>
+  </div>
+
+  <div class="mb-6 flex flex-wrap gap-2" role="tablist" aria-label="Категории услуг">
+    {priceList.categories.map((category, i) => (
+      <button
+        type="button"
+        role="tab"
+        id={`tab-${category.id}`}
+        aria-controls={`panel-${category.id}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? 0 : -1}
+        title={category.name}
+        class="flex items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-2 text-sm font-medium text-neutral-300 transition-all duration-300 hover:bg-neutral-800 aria-selected:border-primary aria-selected:bg-primary aria-selected:text-neutral-900 aria-selected:shadow-lg aria-selected:shadow-primary/30"
+        data-price-tab
+      >
+        <Icon name={category.icon} class="size-4" />
+        <span class="sr-only sm:not-sr-only">{category.name}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="mb-8 min-h-[360px]">
+    {priceList.categories.map((category, i) => (
+      <section
+        id={`panel-${category.id}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${category.id}`}
+        hidden={i !== 0}
+        data-price-panel
+      >
+        <h4 class="sr-only">{category.name}</h4>
+        <table class="w-full border-separate border-spacing-y-3">
+          <caption class="sr-only">{category.name} — цены</caption>
+          <thead class="sr-only">
+            <tr><th scope="col">Услуга</th><th scope="col">Цена</th></tr>
+          </thead>
+          <tbody>
+            {category.items.map(item => (
+              <tr class="group transition-transform duration-200 hover:-translate-y-1">
+                <td class="relative rounded-l-xl border-y border-l border-neutral-800 bg-neutral-900 p-4 text-sm font-medium text-white transition-colors group-hover:border-primary/50 group-hover:text-primary">
+                  <span class="absolute inset-y-0 left-0 w-1 rounded-l-xl bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                  {item.service}
+                </td>
+                <td class="rounded-r-xl border-y border-r border-neutral-800 bg-neutral-900 p-4 text-right text-base font-bold whitespace-nowrap text-primary transition-colors group-hover:border-primary/50">
+                  {item.price}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    ))}
+  </div>
+
+  <div class="flex items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
+    <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/20">
+      <Icon name="lucide:info" class="size-4 text-primary" />
+    </span>
+    <p class="text-sm text-neutral-300">{priceList.note}</p>
+  </div>
+
+  <button type="button" class="btn btn-lg btn-primary mt-6 w-full shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40" data-open-consultation>
+    Получить расчёт
+    <Icon name="lucide:calculator" class="size-5" />
+  </button>
+
+  <div class="absolute -top-8 -right-8 -z-10 size-32 rounded-full bg-primary/5 blur-3xl"></div>
+  <div class="absolute -bottom-8 -left-8 -z-10 size-24 rounded-full bg-primary/5 blur-3xl"></div>
+</div>
+
+<script>
+  // Табы прайса: все цены есть в HTML (индексируются), JS только переключает видимость
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-price-tab]')]
+  const panels = [...document.querySelectorAll<HTMLElement>('[data-price-panel]')]
+
+  function select(index: number, focus = false) {
+    tabs.forEach((tab, i) => {
+      const selected = i === index
+      tab.setAttribute('aria-selected', String(selected))
+      tab.tabIndex = selected ? 0 : -1
+      panels[i].hidden = !selected
+    })
+    if (focus) tabs[index].focus()
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i))
+    tab.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') select((i + 1) % tabs.length, true)
+      if (e.key === 'ArrowLeft') select((i - 1 + tabs.length) % tabs.length, true)
+    })
+  })
+</script>

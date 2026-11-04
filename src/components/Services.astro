@@ -1,0 +1,44 @@
+---
+import { Icon } from 'astro-icon/components'
+import { services } from '~/data/landing'
+---
+
+<section id="services" class="relative overflow-hidden py-16 sm:py-24 lg:py-32" aria-labelledby="services-title">
+  <div class="absolute top-20 left-1/4 -z-10 size-[400px] rounded-full bg-primary/20 blur-[120px]"></div>
+  <div class="absolute right-1/4 bottom-20 -z-10 size-[400px] rounded-full bg-primary/15 blur-[120px]"></div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 id="services-title" class="section-title">
+        <span class="text-primary">{services.title}</span> {services.titleRest}
+      </h2>
+      <p class="section-description mx-auto max-w-5xl">{services.description}</p>
+    </div>
+
+    <ul class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+      {services.cards.map(card => (
+        <li class="group relative">
+          <article class="relative h-full rounded-2xl border border-neutral-800 bg-neutral-900 p-8 transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10">
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+            <div class="relative mb-6 flex justify-center">
+              <div class="relative rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 p-4 transition-all duration-500 group-hover:from-primary/20 group-hover:to-primary/10">
+                <div class="absolute inset-0 rounded-xl bg-primary/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100"></div>
+                <Icon name={card.icon} class="relative size-12 text-primary transition-transform duration-500 group-hover:scale-110" />
+              </div>
+            </div>
+
+            <h3 class="relative mb-4 text-center text-xl font-bold text-white transition-colors duration-300 group-hover:text-primary">
+              {card.title}
+            </h3>
+            <p class="relative text-center leading-relaxed text-neutral-400">
+              {card.description}
+            </p>
+
+            <div class="absolute bottom-0 left-1/2 h-1 w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary to-transparent transition-all duration-500 group-hover:w-3/4"></div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

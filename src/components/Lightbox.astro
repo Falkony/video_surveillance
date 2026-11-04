@@ -1,0 +1,87 @@
+---
+import { Icon } from 'astro-icon/components'
+
+export interface LightboxItem {
+  src: string
+  alt: string
+  caption?: string
+  description?: string
+}
+
+interface Props {
+  id: string
+  label: string
+  items: LightboxItem[]
+}
+
+const { id, label, items } = Astro.props
+---
+
+<dialog id={id} data-lightbox data-items={JSON.stringify(items)} aria-label={label} class="w-full max-w-5xl overflow-visible px-14 backdrop:bg-black/90">
+  <div class="relative">
+    <button type="button" data-lightbox-close class="absolute -top-12 right-0 flex size-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20" aria-label="Закрыть">
+      <Icon name="lucide:x" class="size-6 text-white" />
+    </button>
+
+    <figure class="relative overflow-hidden rounded-xl bg-neutral-900 shadow-2xl">
+      <img data-lightbox-img src="" alt="" class="max-h-[80vh] w-full object-contain" decoding="async" />
+      <figcaption data-lightbox-caption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-6 empty:hidden"></figcaption>
+    </figure>
+
+    <button type="button" data-lightbox-prev class="absolute top-1/2 left-0 flex size-12 -translate-x-full -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20" aria-label="Предыдущее изображение">
+      <Icon name="lucide:chevron-left" class="size-8 text-white" />
+    </button>
+    <button type="button" data-lightbox-next class="absolute top-1/2 right-0 flex size-12 translate-x-full -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20" aria-label="Следующее изображение">
+      <Icon name="lucide:chevron-right" class="size-8 text-white" />
+    </button>
+
+    <p data-lightbox-counter class="absolute -bottom-9 left-1/2 -translate-x-1/2 text-sm text-white/60" aria-live="polite"></p>
+  </div>
+</dialog>
+
+<script>
+  import type { LightboxItem } from './Lightbox.astro'
+
+  document.querySelectorAll<HTMLDialogElement>('dialog[data-lightbox]').forEach((dialog) => {
+    const items: LightboxItem[] = JSON.parse(dialog.dataset.items!)
+    const img = dialog.querySelector<HTMLImageElement>('[data-lightbox-img]')!
+    const caption = dialog.querySelector<HTMLElement>('[data-lightbox-caption]')!
+    const counter = dialog.querySelector<HTMLElement>('[data-lightbox-counter]')!
+    let index = 0
+
+    function show(i: number) {
+      index = (i + items.length) % items.length
+      const item = items[index]
+      img.src = item.src
+      img.alt = item.alt
+      caption.replaceChildren()
+      if (item.caption) {
+        const title = Object.assign(document.createElement('p'), { className: 'text-lg font-bold text-white', textContent: item.caption })
+        caption.append(title)
+        if (item.description) {
+          caption.append(Object.assign(document.createElement('p'), { className: 'text-sm text-neutral-300', textContent: item.description }))
+        }
+      }
+      counter.textContent = `${index + 1} / ${items.length}`
+      // Предзагрузка соседнего кадра
+      new Image().src = items[(index + 1) % items.length].src
+    }
+
+    dialog.querySelector('[data-lightbox-prev]')!.addEventListener('click', () => show(index - 1))
+    dialog.querySelector('[data-lightbox-next]')!.addEventListener('click', () => show(index + 1))
+    dialog.querySelector('[data-lightbox-close]')!.addEventListener('click', () => dialog.close())
+    // Клик по подложке закрывает
+    dialog.addEventListener('click', e => e.target === dialog && dialog.close())
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(index + 1)
+      if (e.key === 'ArrowLeft') show(index - 1)
+    })
+
+    document.querySelectorAll<HTMLElement>(`[data-lightbox-open="${dialog.id}"]`).forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        show(Number(trigger.dataset.index))
+        dialog.showModal()
+      })
+    })
+  })
+</script>

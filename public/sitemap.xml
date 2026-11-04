@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Старый адрес карты сайта (был в Nuxt). Актуальная — /sitemap-index.xml -->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://nnvss.ru/sitemap-0.xml</loc>
+  </sitemap>
+</sitemapindex>

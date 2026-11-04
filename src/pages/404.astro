@@ -1,0 +1,16 @@
+---
+import { Icon } from 'astro-icon/components'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Страница не найдена" description="Такой страницы нет на сайте." noindex>
+  <section class="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center px-4 py-24 text-center">
+    <p class="text-6xl font-bold text-primary">404</p>
+    <h1 class="mt-4 text-3xl font-bold text-white">Страница не найдена</h1>
+    <p class="mt-4 text-neutral-400">Возможно, ссылка устарела. Перейдите на главную — там услуги, цены и форма заявки.</p>
+    <a href="/" class="btn btn-lg btn-primary mt-8">
+      <Icon name="lucide:arrow-left" class="size-5" />
+      На главную
+    </a>
+  </section>
+</BaseLayout>

@@ -1,0 +1,10 @@
+---
+import { Image } from 'astro:assets'
+import logo from '~/assets/images/logo.png'
+import { site } from '~/data/site'
+---
+
+<span class="flex items-center gap-2">
+  <Image src={logo} alt="" width={32} height={32} densities={[1, 2]} class="size-8 rounded-sm" loading="eager" />
+  <span class="text-xl font-bold text-white">{site.brand}</span>
+</span>

@@ -1,0 +1,127 @@
+---
+import { Icon } from 'astro-icon/components'
+import Logo from '~/components/Logo.astro'
+import { nav, site } from '~/data/site'
+import { anchorPrefix } from '~/utils/path'
+
+const prefix = anchorPrefix(Astro.url)
+---
+
+<header class="sticky top-0 z-50 h-(--header-height) border-b border-neutral-800 bg-bg/75 backdrop-blur">
+  <div class="mx-auto flex h-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+    <a href="/" aria-label={`${site.brand} — на главную`}>
+      <Logo />
+    </a>
+
+    <nav aria-label="Основное меню" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {nav.map(item => (
+          <li>
+            <a
+              href={`${prefix}${item.href}`}
+              data-spy={item.href.slice(1)}
+              class="px-2.5 py-1.5 text-sm font-medium text-neutral-400 transition-colors hover:text-white data-[active]:text-primary"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={`tel:${site.phone}`} data-goal="phone_click" class="inline-flex items-center gap-1.5 rounded-md p-1.5 text-sm font-semibold text-white hover:text-primary sm:px-2" aria-label={`Позвонить ${site.phoneDisplay}`}>
+        <Icon name="lucide:phone" class="size-5 text-primary sm:size-4" />
+        <span class="hidden sm:inline">{site.phoneDisplay}</span>
+      </a>
+      <button type="button" class="btn btn-md btn-subtle hidden lg:inline-flex" data-open-consultation>
+        Консультация
+      </button>
+      <button
+        type="button"
+        class="-me-1.5 rounded-md p-1.5 text-neutral-200 hover:bg-neutral-800 lg:hidden"
+        aria-label="Открыть меню"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <Icon name="lucide:menu" class="size-6" data-icon-open />
+        <Icon name="lucide:x" class="hidden size-6" data-icon-close />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Вне <header>: backdrop-filter шапки иначе ограничил бы fixed-панель её высотой -->
+<div
+  id="mobile-menu"
+  hidden
+  class="fixed inset-x-0 top-(--header-height) bottom-0 z-40 flex flex-col overflow-y-auto bg-bg lg:hidden"
+>
+  <nav aria-label="Мобильное меню" class="px-4 py-6 sm:px-6">
+    <ul class="flex flex-col">
+      {nav.map(item => (
+        <li>
+          <a href={`${prefix}${item.href}`} class="block rounded-md px-2.5 py-2 text-base font-medium text-neutral-300 hover:bg-neutral-800/60 hover:text-white" data-menu-link>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href={`tel:${site.phone}`} data-goal="phone_click" class="mt-4 flex items-center gap-2 px-2.5 text-lg font-semibold text-white">
+      <Icon name="lucide:phone" class="size-5 text-primary" />
+      {site.phoneDisplay}
+    </a>
+    <button type="button" class="btn btn-lg btn-subtle mt-4 w-full" data-open-consultation data-menu-link>
+      Консультация
+    </button>
+  </nav>
+
+  <div class="mt-auto border-t border-neutral-800 px-4 py-4 text-center">
+    <p class="text-sm text-neutral-400">© {new Date().getFullYear()} {site.brand}. Все права защищены.</p>
+    <p class="mt-2 text-xs leading-relaxed text-neutral-400">
+      {site.legal.name}<br />
+      ИНН {site.legal.inn}<br />
+      ОГРН {site.legal.ogrn}
+    </p>
+  </div>
+</div>
+
+<script>
+  import { reachGoal } from '~/scripts/metrika'
+
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]')!
+  const menu = document.getElementById('mobile-menu')!
+
+  function setMenu(open: boolean) {
+    menu.hidden = !open
+    toggle.setAttribute('aria-expanded', String(open))
+    toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню')
+    toggle.querySelector('[data-icon-open]')!.classList.toggle('hidden', open)
+    toggle.querySelector('[data-icon-close]')!.classList.toggle('hidden', !open)
+    document.documentElement.classList.toggle('overflow-hidden', open)
+  }
+
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'))
+  menu.querySelectorAll('[data-menu-link]').forEach(el => el.addEventListener('click', () => setMenu(false)))
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', e => e.matches && setMenu(false))
+
+  // Цели Метрики по кликам на телефон
+  document.querySelectorAll('[data-goal]').forEach((el) => {
+    el.addEventListener('click', () => reachGoal((el as HTMLElement).dataset.goal!))
+  })
+
+  // Подсветка активного пункта меню при прокрутке
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-spy]')
+  const sections = [...links].map(l => document.getElementById(l.dataset.spy!)).filter(Boolean) as HTMLElement[]
+
+  if (sections.length) {
+    const visible = new Set<string>()
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.isIntersecting ? visible.add(e.target.id) : visible.delete(e.target.id))
+      const current = sections.find(s => visible.has(s.id))?.id
+      links.forEach(l => l.toggleAttribute('data-active', l.dataset.spy === current))
+    }, { rootMargin: '-40% 0px -55% 0px' })
+    sections.forEach(s => observer.observe(s))
+  }
+</script>

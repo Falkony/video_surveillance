@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components'
+import line6 from '~/assets/images/decor/line-6.svg'
+import line7 from '~/assets/images/decor/line-7.svg'
+import { cta } from '~/data/landing'
+
+// Звёзды генерируются при сборке детерминированно (одинаковый HTML между билдами)
+function stars(count: number, seed: number) {
+  let s = seed
+  const rand = () => (s = (s * 16807) % 2147483647) / 2147483647
+  return Array.from({ length: count }, () => {
+    const spread = (rand() / 2).toFixed(2) // звёзды 1–2px
+    // Цвет тени не указываем — берётся currentColor (text-primary у слоя)
+    return `${Math.floor(rand() * 2000)}px ${Math.floor(rand() * 2000)}px 0 ${spread}px`
+  }).join(',')
+}
+
+const layers = [
+  { shadow: stars(120, 7), duration: 100, opacity: 1 },
+  { shadow: stars(90, 13), duration: 150, opacity: 0.75 },
+  { shadow: stars(90, 29), duration: 200, opacity: 0.5 }
+]
+---
+
+<section class="@container relative isolate overflow-hidden" aria-labelledby="cta-title">
+  <div class="pointer-events-none absolute inset-y-0 inset-x-5 -z-10 overflow-hidden sm:inset-x-7 lg:inset-x-9" aria-hidden="true">
+    <div class="absolute inset-x-0 top-0 h-[180px] bg-[radial-gradient(ellipse_50%_90%_at_50%_10%,color-mix(in_oklab,var(--color-primary)_22%,transparent),transparent)] opacity-50"></div>
+    <div class="stars absolute top-0 left-1/2 size-full -translate-x-1/2">
+      {layers.map(layer => (
+        <div
+          class="absolute top-0 left-0 size-px rounded-full bg-transparent text-primary"
+          style={`box-shadow:${layer.shadow};opacity:${layer.opacity};animation:rising-stars ${layer.duration}s linear infinite`}
+        ></div>
+      ))}
+    </div>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+    <div class="@max-[1280px]:hidden" aria-hidden="true">
+      <img src={line6.src} alt="" loading="lazy" decoding="async" class="absolute -top-10 left-10 h-full w-auto sm:top-0" />
+      <img src={line7.src} alt="" loading="lazy" decoding="async" class="absolute right-0 bottom-0 h-full w-auto" />
+    </div>
+
+    <h2 id="cta-title" class="section-title">{cta.title}</h2>
+    <p class="section-description mx-auto max-w-3xl">{cta.description}</p>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <button type="button" class="btn btn-xl btn-primary" data-open-consultation>
+        Получить консультацию
+        <Icon name="lucide:phone" class="size-6" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .stars {
+    mask-image: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 0.8) 25%, #000 50%, rgb(0 0 0 / 0.8) 75%, transparent 100%);
+  }
+</style>
