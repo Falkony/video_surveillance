@@ -157,7 +157,12 @@ fetch_code() {
   if [[ -d "$APP_DIR/.git" ]]; then
     cd "$APP_DIR"
     # Lock-файлы мог переписать сам менеджер пакетов при установке — это не правки
-    git checkout -q -- pnpm-lock.yaml package-lock.json 2>/dev/null || true
+    local lockfile
+    for lockfile in pnpm-lock.yaml package-lock.json; do
+      if git ls-files --error-unmatch "$lockfile" >/dev/null 2>&1; then
+        git checkout -q -- "$lockfile"
+      fi
+    done
     # Изменения прав файлов (chmod) не считаем локальными правками
     if ! git -c core.fileMode=false diff --quiet HEAD --; then
       git -c core.fileMode=false status --short
@@ -229,7 +234,8 @@ install_deps() {
 build() {
   step "Сборка сайта" "ошибка в коде или данных — смотрите сообщение Astro выше; сайт при этом продолжает работать на старой версии"
   rm -rf dist-new
-  ASTRO_OUT_DIR=dist-new npm run build --silent
+  # Построчный лог оптимизации ~200 картинок скрываем, ошибки и итог остаются
+  ASTRO_OUT_DIR=dist-new npm run build --silent 2>&1 | grep -v --line-buffered '/_astro/.*(before:'
   [[ -f dist-new/server/entry.mjs && -f dist-new/client/index.html ]] \
     || die "Сборка завершилась, но в dist-new нет server/entry.mjs или client/index.html." "запустите npm run build вручную и посмотрите вывод"
   ok "Собрано: $(du -sh dist-new | cut -f1)"
@@ -256,7 +262,7 @@ restart_app() {
       catch { console.log("") }
     })' "$APP_NAME")"
 
-  if [[ "$current_script" == *"/dist/server/entry.mjs" ]]; then
+  if [[ "${current_script//\\//}" == *"/dist/server/entry.mjs" ]]; then
     pm2 reload ecosystem.config.cjs --update-env >/dev/null
     ok "Процесс $APP_NAME перезапущен"
   else
