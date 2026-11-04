@@ -1,7 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components'
 
-const field = 'block w-full rounded-md bg-neutral-900 px-3 py-2 text-sm text-white ring ring-inset ring-neutral-700 placeholder:text-neutral-500 focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-75 aria-[invalid=true]:ring-red-400'
+// ym-disable-keys — Вебвизор Метрики не записывает ввод в этих полях (обещано в политике, п. 10.2)
+const field = 'ym-disable-keys block w-full rounded-md bg-neutral-900 px-3 py-2 text-sm text-white ring ring-inset ring-neutral-700 placeholder:text-neutral-500 focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-75 aria-[invalid=true]:ring-red-400'
 ---
 
 <dialog id="consultation" aria-labelledby="consultation-title" class="w-[calc(100%-2rem)] max-w-lg">
@@ -43,8 +44,8 @@ const field = 'block w-full rounded-md bg-neutral-900 px-3 py-2 text-sm text-whi
         <label class="flex items-start gap-2.5 text-sm text-neutral-300">
           <input name="consent" type="checkbox" required class="mt-0.5 size-4 shrink-0 accent-blue-400" aria-describedby="c-consent-error" />
           <span>
-            Я даю согласие на обработку персональных данных в соответствии с
-            <a href="/privacy" target="_blank" class="text-primary underline hover:text-blue-300">политикой конфиденциальности</a>
+            Я даю <a href="/consent" target="_blank" class="text-primary underline hover:text-blue-300">согласие на обработку персональных данных</a>{' '}
+            и ознакомлен(а) с <a href="/privacy" target="_blank" class="text-primary underline hover:text-blue-300">политикой конфиденциальности</a>
           </span>
         </label>
         <p id="c-consent-error" class="mt-1.5 text-sm text-red-400 empty:hidden" data-error="consent"></p>

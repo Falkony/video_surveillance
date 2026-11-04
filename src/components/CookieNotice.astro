@@ -1,0 +1,37 @@
+---
+// Уведомление о cookie и Яндекс.Метрике (политика, раздел 10).
+// Показывается до нажатия «Понятно»; выбор запоминается в localStorage.
+---
+
+<div
+  id="cookie-notice"
+  hidden
+  role="region"
+  aria-label="Уведомление об использовании cookie"
+  class="fixed inset-x-4 bottom-4 z-[60] flex flex-col gap-3 rounded-lg bg-neutral-900/95 p-4 text-sm text-neutral-300 shadow-lg ring ring-neutral-800 backdrop-blur sm:right-auto sm:max-w-md sm:flex-row sm:items-center"
+>
+  <p>
+    Мы используем файлы cookie и Яндекс.Метрику, чтобы анализировать посещаемость сайта. Продолжая пользоваться сайтом, вы соглашаетесь с этим.
+    <a href="/privacy#cookies" class="text-primary underline hover:text-blue-300">Подробнее</a>
+  </p>
+  <button type="button" class="btn btn-md btn-primary shrink-0" data-cookie-accept>Понятно</button>
+</div>
+
+<script>
+  const KEY = 'cookie-notice-accepted'
+  const notice = document.getElementById('cookie-notice')!
+
+  let accepted = false
+  try {
+    accepted = localStorage.getItem(KEY) === '1'
+  } catch {}
+
+  if (!accepted) notice.hidden = false
+
+  notice.querySelector('[data-cookie-accept]')!.addEventListener('click', () => {
+    notice.hidden = true
+    try {
+      localStorage.setItem(KEY, '1')
+    } catch {}
+  })
+</script>
