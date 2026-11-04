@@ -173,6 +173,25 @@ fetch_code() {
     git checkout -q "$BRANCH"
     HINT="либо ветка на сервере разошлась с GitHub (если локальные коммиты не нужны: git reset --hard origin/$BRANCH), либо неотслеживаемые файлы мешают обновлению — git назвал их выше, удалите или перенесите их"
     git merge --ff-only -q "origin/$BRANCH"
+  elif [[ -d "$APP_DIR" && -n "$(ls -A "$APP_DIR")" ]]; then
+    # Каталог уже есть, но это не git-репозиторий — обычно в нём лежит только
+    # скачанный deploy.sh (и, может быть, .env). Разворачиваем репозиторий поверх.
+    local entry extra=()
+    for entry in "$APP_DIR"/* "$APP_DIR"/.[!.]*; do
+      [[ -e "$entry" ]] || continue
+      case "${entry##*/}" in deploy.sh | .env) ;; *) extra+=("${entry##*/}") ;; esac
+    done
+    if [[ ${#extra[@]} -gt 0 ]]; then
+      printf '%s\n' "${extra[@]}"
+      die "Каталог $APP_DIR не пуст и не является git-репозиторием (файлы выше) — не буду их перезаписывать." \
+        "перенесите эти файлы или укажите другой каталог: APP_DIR=/путь ./deploy.sh"
+    fi
+    cd "$APP_DIR"
+    git init -q
+    git remote add origin "$REPO_URL"
+    git fetch -q origin "$BRANCH"
+    git checkout -q -f -B "$BRANCH" "origin/$BRANCH"
+    git branch -q --set-upstream-to="origin/$BRANCH"
   else
     HINT="проверьте, что каталог $(dirname "$APP_DIR") существует и доступен на запись"
     mkdir -p "$(dirname "$APP_DIR")"
