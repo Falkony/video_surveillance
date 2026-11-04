@@ -71,16 +71,30 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     `⏰ <b>Время:</b> ${new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}`
   ].join('\n')
 
+  // Если api.telegram.org недоступен с сервера — можно указать свой прокси-адрес
+  const apiBase = (env('TELEGRAM_API_URL') || 'https://api.telegram.org').replace(/\/+$/, '')
+
   try {
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const res = await fetch(`${apiBase}/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
       signal: AbortSignal.timeout(10_000)
     })
-    if (!res.ok) throw new Error(`${res.status} ${await res.text()}`)
+    if (!res.ok) {
+      // Telegram отвечает {"ok":false,"description":"..."} — description и есть причина
+      const details = await res.text().catch(() => '')
+      throw new Error(`Telegram ответил ${res.status}: ${details}`)
+    }
   } catch (error) {
-    console.error('[consultation] Telegram API error:', error)
+    const reason = error instanceof Error && error.name === 'TimeoutError'
+      ? `нет ответа от ${apiBase} за 10 с (сервер не может достучаться до Telegram)`
+      : error instanceof Error && error.cause
+        ? `${error.message} — ${String((error.cause as Error).message ?? error.cause)}`
+        : String(error)
+    console.error(`[consultation] Заявка не отправлена в Telegram: ${reason}`)
+    // Чтобы заявка не потерялась — она остаётся в логе PM2
+    console.error(`[consultation] Потерянная заявка: ${name}, ${phone}${message ? `, «${message}»` : ''}`)
     return json(502, 'Не удалось отправить заявку. Позвоните нам, пожалуйста.')
   }
 
