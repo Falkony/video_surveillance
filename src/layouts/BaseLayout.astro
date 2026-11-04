@@ -1,0 +1,73 @@
+---
+import '~/styles/global.css'
+import Header from '~/components/Header.astro'
+import Footer from '~/components/Footer.astro'
+import ConsultationModal from '~/components/ConsultationModal.astro'
+import YandexMetrika from '~/components/YandexMetrika.astro'
+import { site } from '~/data/site'
+import { cleanPath } from '~/utils/path'
+
+interface Props {
+  title: string
+  description: string
+  // Не дописывать «| бренд» к title (для главной, где title уже полный)
+  rawTitle?: boolean
+  noindex?: boolean
+  jsonLd?: Record<string, unknown>
+}
+
+const { title, description, rawTitle = false, noindex = false, jsonLd } = Astro.props
+
+const fullTitle = rawTitle ? title : `${title} | ${site.brand}`
+const canonical = new URL(cleanPath(Astro.url), Astro.site).href
+const ogImage = new URL(site.ogImage, Astro.site).href
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#171717" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="yandex-verification" content={site.yandexVerification} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+
+    <YandexMetrika />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-neutral-900">
+      Перейти к содержимому
+    </a>
+
+    <Header />
+
+    <main id="main" class="flex flex-1 flex-col">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <ConsultationModal />
+  </body>
+</html>

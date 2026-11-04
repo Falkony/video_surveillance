@@ -1,0 +1,73 @@
+---
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon/components'
+import heroImage from '~/assets/images/hero.jpg'
+import { hero } from '~/data/landing'
+---
+
+<section class="relative flex items-center justify-center overflow-hidden" aria-labelledby="hero-title">
+  <div class="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute inset-0 will-change-transform" data-parallax>
+      <Image
+        src={heroImage}
+        alt=""
+        widths={[640, 1280]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="size-full scale-110 object-cover"
+      />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80"></div>
+    <div class="absolute top-1/4 left-1/4 size-64 animate-pulse rounded-full bg-blue-500/20 blur-3xl"></div>
+    <div class="absolute right-1/4 bottom-1/4 size-80 animate-pulse rounded-full bg-blue-400/15 blur-3xl [animation-delay:1s]"></div>
+  </div>
+
+  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:py-40">
+    <h1
+      id="hero-title"
+      class="animate-fade-in-up text-[clamp(1.75rem,5vw,3.25rem)] leading-tight font-bold text-balance text-white drop-shadow-2xl [animation-delay:0.1s]"
+    >
+      {hero.title} <span class="text-primary">{hero.titleAccent}</span>
+    </h1>
+
+    <p class="animate-fade-in-up mt-4 text-base font-medium text-white/90 drop-shadow-lg [animation-delay:0.25s] sm:mt-6 sm:text-xl md:text-2xl lg:text-3xl">
+      {hero.subtitle}
+    </p>
+
+    <p class="animate-fade-in-up mx-auto mt-6 max-w-4xl text-sm leading-relaxed text-pretty text-white/90 drop-shadow-md [animation-delay:0.4s] sm:text-base md:text-lg lg:text-xl">
+      {hero.description}
+    </p>
+
+    <div class="animate-fade-in-up mt-10 flex flex-wrap items-center justify-center gap-4 [animation-delay:0.55s]">
+      <button type="button" class="btn btn-xl btn-primary" data-open-consultation>
+        Получить консультацию
+        <Icon name="lucide:arrow-right" class="size-6" />
+      </button>
+      <a href="#projects" class="btn btn-xl btn-outline bg-black/20">
+        <Icon name="lucide:camera" class="size-6" />
+        Наши проекты
+      </a>
+      <a href="#price" class="btn btn-xl btn-outline bg-black/20">
+        <Icon name="lucide:file-text" class="size-6" />
+        Прайс-лист
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Параллакс фона (отключён при prefers-reduced-motion)
+  const layer = document.querySelector<HTMLElement>('[data-parallax]')
+  if (layer && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let ticking = false
+    addEventListener('scroll', () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        if (scrollY < innerHeight * 1.5) layer.style.transform = `translateY(${scrollY * 0.5}px)`
+        ticking = false
+      })
+    }, { passive: true })
+  }
+</script>

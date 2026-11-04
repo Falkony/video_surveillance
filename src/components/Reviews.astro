@@ -1,0 +1,128 @@
+---
+import { Image, getImage } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+import { Icon } from 'astro-icon/components'
+import Lightbox from '~/components/Lightbox.astro'
+import { certificates, reviews, stats } from '~/data/landing'
+
+const certModules = import.meta.glob<{ default: ImageMetadata }>('~/assets/images/certificates/*.jpg', { eager: true })
+const certs = certificates.map((cert) => {
+  const image = Object.entries(certModules).find(([path]) => path.endsWith(`/${cert.file}`))![1].default
+  return { ...cert, image, alt: `Сертификат Dahua ${cert.title}: ${cert.person}` }
+})
+
+const lightboxItems = await Promise.all(certs.map(async cert => ({
+  src: (await getImage({ src: cert.image, width: Math.min(cert.image.width, 1600), format: 'webp' })).src,
+  alt: cert.alt,
+  caption: `${cert.person} — ${cert.title}`,
+  description: cert.description
+})))
+---
+
+<section id="reviews" class="relative overflow-hidden py-16 sm:py-24 lg:py-32" aria-labelledby="reviews-title">
+  <div class="absolute top-20 left-1/4 -z-10 size-[500px] rounded-full bg-primary/10 blur-[150px]"></div>
+  <div class="absolute right-1/4 bottom-20 -z-10 size-[500px] rounded-full bg-primary/15 blur-[150px]"></div>
+
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 id="reviews-title" class="section-title">
+        {reviews.title} <span class="text-primary">{reviews.titleAccent}</span>
+      </h2>
+      <p class="section-description mx-auto max-w-4xl">{reviews.description}</p>
+    </div>
+  </div>
+
+  <div class="@container relative mx-auto mt-12 max-w-[1400px]" data-carousel data-carousel-start="1">
+    <ul
+      class="no-scrollbar relative flex snap-x snap-mandatory gap-5 overflow-x-auto overscroll-x-contain scroll-smooth px-4 py-6 lg:gap-10 lg:px-[calc((100cqw-(100cqw-80px)/3)/2)]"
+      data-carousel-track
+      aria-label="Отзывы клиентов"
+    >
+      {reviews.items.map(review => (
+        <li
+          class="w-full shrink-0 snap-center transition-all duration-300 lg:w-[calc((100cqw-80px)/3)] lg:opacity-60 lg:data-[active]:scale-105 lg:data-[active]:opacity-100"
+          data-carousel-slide
+        >
+          <figure class="flex h-full flex-col rounded-2xl border border-neutral-800 bg-neutral-900 p-8 pb-6 shadow-xl transition-colors duration-300 hover:border-primary">
+            <div class="mb-4 flex gap-1" role="img" aria-label="Оценка 5 из 5">
+              {Array.from({ length: 5 }).map(() => (
+                <Icon name="lucide:star" class="size-5 fill-yellow-500 text-yellow-500" />
+              ))}
+            </div>
+            <blockquote class="mb-6 flex-1 text-base leading-relaxed text-neutral-300 italic">
+              <p>«{review.quote}»</p>
+            </blockquote>
+            <figcaption class="border-t border-neutral-800 pt-4">
+              <p class="font-bold text-white">{review.author}</p>
+              <p class="text-sm text-neutral-400">{review.role}</p>
+              <p class="mt-1 text-xs text-primary">{review.company}</p>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+    <div class="flex items-center justify-center gap-2 pt-2" data-carousel-dots></div>
+  </div>
+
+  <div class="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8">
+    <dl class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      {stats.map(stat => (
+        <div class="flex flex-col-reverse text-center">
+          <dt class="text-sm text-neutral-400">{stat.label}</dt>
+          <dd class="mb-2 text-4xl font-bold text-primary">{stat.value}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="mt-16 border-t border-neutral-800 pt-16">
+      <div class="mb-10 text-center">
+        <h3 class="mb-4 text-2xl font-bold text-white sm:text-3xl">
+          Сертифицированные специалисты <span class="text-primary">Dahua</span>
+        </h3>
+        <p class="mx-auto max-w-2xl text-neutral-400">
+          Наши инженеры прошли официальную сертификацию Dahua Technology и имеют подтверждённую квалификацию для работы с оборудованием мирового класса
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
+        {certs.map((cert, i) => (
+          <li>
+            <button
+              type="button"
+              class="group relative block w-full overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 text-left transition-all duration-500 hover:-translate-y-2 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+              data-lightbox-open="certificates-lightbox"
+              data-index={i}
+              aria-label={`Открыть ${cert.alt}`}
+            >
+              <Image
+                src={cert.image}
+                alt={cert.alt}
+                format="webp"
+                widths={[400, 640]}
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                class="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <span class="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <span class="block translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
+                  <span class="mb-1 block text-sm font-bold text-white">{cert.person}</span>
+                  <span class="block text-xs font-medium text-blue-300">{cert.title}</span>
+                </span>
+                <span class="absolute top-1/2 left-1/2 flex size-12 -translate-1/2 scale-75 items-center justify-center rounded-full border border-white/50 bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-100">
+                  <Icon name="lucide:zoom-in" class="size-6 text-white" />
+                </span>
+              </span>
+              <span class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <Lightbox id="certificates-lightbox" label="Сертификаты Dahua" items={lightboxItems} />
+</section>
+
+<script>
+  import { initCarousels } from '~/scripts/carousel'
+  initCarousels()
+</script>

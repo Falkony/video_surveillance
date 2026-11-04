@@ -1,0 +1,193 @@
+---
+import { Icon } from 'astro-icon/components'
+
+const field = 'block w-full rounded-md bg-neutral-900 px-3 py-2 text-sm text-white ring ring-inset ring-neutral-700 placeholder:text-neutral-500 focus:ring-2 focus:ring-primary focus:outline-none disabled:opacity-75 aria-[invalid=true]:ring-red-400'
+---
+
+<dialog id="consultation" aria-labelledby="consultation-title" class="w-[calc(100%-2rem)] max-w-lg">
+  <div class="rounded-lg bg-neutral-900 shadow-lg ring ring-neutral-800">
+    <div class="flex items-center justify-between gap-2 border-b border-neutral-800 px-4 py-4 sm:px-6">
+      <p id="consultation-title" class="font-semibold text-white">Получить консультацию</p>
+      <button type="button" class="rounded-md p-1 text-neutral-400 hover:bg-neutral-800 hover:text-white" aria-label="Закрыть" data-close>
+        <Icon name="lucide:x" class="size-5" />
+      </button>
+    </div>
+
+    <form id="consultation-form" class="space-y-4 p-4 sm:p-6" novalidate>
+      <div>
+        <label for="c-name" class="mb-1.5 block text-sm font-medium text-neutral-200">Ваше имя <span class="text-red-400" aria-hidden="true">*</span></label>
+        <input id="c-name" name="name" type="text" autocomplete="name" required maxlength="100" placeholder="Иван Иванов" class={field} aria-describedby="c-name-error" />
+        <p id="c-name-error" class="mt-1.5 text-sm text-red-400 empty:hidden" data-error="name"></p>
+      </div>
+
+      <div>
+        <label for="c-phone" class="mb-1.5 block text-sm font-medium text-neutral-200">Телефон <span class="text-red-400" aria-hidden="true">*</span></label>
+        <input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+7(___)-___-__-__" class={field} aria-describedby="c-phone-error" />
+        <p id="c-phone-error" class="mt-1.5 text-sm text-red-400 empty:hidden" data-error="phone"></p>
+      </div>
+
+      <div>
+        <div class="mb-1.5 flex items-center justify-between">
+          <label for="c-message" class="block text-sm font-medium text-neutral-200">Сообщение</label>
+          <span class="text-sm text-neutral-500">Необязательно</span>
+        </div>
+        <textarea id="c-message" name="message" rows="4" maxlength="2000" placeholder="Расскажите о ваших потребностях в видеонаблюдении..." class={field}></textarea>
+      </div>
+
+      <!-- Ловушка для ботов: люди это поле не видят -->
+      <div class="hidden" aria-hidden="true">
+        <label>Компания <input name="company" type="text" tabindex="-1" autocomplete="off" /></label>
+      </div>
+
+      <div>
+        <label class="flex items-start gap-2.5 text-sm text-neutral-300">
+          <input name="consent" type="checkbox" required class="mt-0.5 size-4 shrink-0 accent-blue-400" aria-describedby="c-consent-error" />
+          <span>
+            Я даю согласие на обработку персональных данных в соответствии с
+            <a href="/privacy" target="_blank" class="text-primary underline hover:text-blue-300">политикой конфиденциальности</a>
+          </span>
+        </label>
+        <p id="c-consent-error" class="mt-1.5 text-sm text-red-400 empty:hidden" data-error="consent"></p>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button type="button" class="btn btn-lg btn-outline flex-1" data-close>Закрыть</button>
+        <button type="submit" class="btn btn-lg btn-primary flex-1" data-submit>
+          <Icon name="lucide:loader-circle" class="hidden size-5 animate-spin" data-spinner />
+          Отправить
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<div
+  id="toast"
+  role="status"
+  aria-live="polite"
+  class="fixed right-4 bottom-4 z-[100] hidden max-w-sm rounded-lg bg-neutral-900 p-4 shadow-lg ring ring-neutral-800 data-[type=error]:ring-red-400/50 data-[type=success]:ring-primary/50"
+>
+  <p class="font-medium text-white" data-toast-title></p>
+  <p class="mt-1 text-sm text-neutral-400" data-toast-text></p>
+</div>
+
+<button
+  type="button"
+  id="scroll-top"
+  aria-label="Наверх"
+  class="fixed right-8 bottom-8 z-40 hidden size-12 translate-y-4 items-center justify-center rounded-full bg-primary text-neutral-900 opacity-0 shadow-lg transition-all duration-300 pointer-events-none hover:scale-110 hover:bg-blue-500 data-[visible]:pointer-events-auto data-[visible]:translate-y-0 data-[visible]:opacity-100 md:flex"
+  tabindex="-1"
+>
+  <Icon name="lucide:arrow-up" class="size-6" />
+</button>
+
+<script>
+  import { reachGoal } from '~/scripts/metrika'
+
+  const dialog = document.getElementById('consultation') as HTMLDialogElement
+  const form = document.getElementById('consultation-form') as HTMLFormElement
+  const phone = form.elements.namedItem('phone') as HTMLInputElement
+  const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!
+  const spinner = form.querySelector<SVGElement>('[data-spinner]')!
+
+  // ---- Открытие/закрытие ----
+  document.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('[data-open-consultation]')) {
+      dialog.showModal()
+      reachGoal('consultation_open')
+    }
+  })
+  dialog.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => dialog.close()))
+  dialog.addEventListener('click', e => e.target === dialog && dialog.close())
+
+  // ---- Маска телефона +7(###)-###-##-## ----
+  function formatPhone(value: string) {
+    let digits = value.replace(/\D/g, '')
+    if (digits.startsWith('8') || digits.startsWith('7')) digits = digits.slice(1)
+    digits = digits.slice(0, 10)
+    if (!digits) return ''
+    const parts = [digits.slice(0, 3), digits.slice(3, 6), digits.slice(6, 8), digits.slice(8, 10)]
+    let out = `+7(${parts[0]}`
+    // Скобку закрываем только после 4-й цифры, иначе её нельзя стереть Backspace
+    if (digits.length > 3) out += ')'
+    if (parts[1]) out += `-${parts[1]}`
+    if (parts[2]) out += `-${parts[2]}`
+    if (parts[3]) out += `-${parts[3]}`
+    return out
+  }
+  phone.addEventListener('input', () => {
+    phone.value = formatPhone(phone.value)
+  })
+
+  // ---- Валидация ----
+  function validate() {
+    const data = new FormData(form)
+    const errors: Record<string, string> = {}
+    if (!String(data.get('name') ?? '').trim()) errors.name = 'Имя обязательно для заполнения'
+    const digits = String(data.get('phone') ?? '').replace(/\D/g, '')
+    if (!digits) errors.phone = 'Телефон обязателен для заполнения'
+    else if (digits.length < 11) errors.phone = 'Введите полный номер телефона'
+    if (!data.get('consent')) errors.consent = 'Необходимо дать согласие на обработку данных'
+
+    form.querySelectorAll<HTMLElement>('[data-error]').forEach((el) => {
+      const key = el.dataset.error!
+      el.textContent = errors[key] ?? ''
+      form.querySelector(`[name="${key}"]`)?.setAttribute('aria-invalid', String(Boolean(errors[key])))
+    })
+    const first = Object.keys(errors)[0]
+    if (first) (form.elements.namedItem(first) as HTMLElement).focus()
+    return !first
+  }
+
+  // ---- Тост ----
+  const toast = document.getElementById('toast')!
+  let toastTimer = 0
+  function showToast(type: 'success' | 'error', title: string, text: string) {
+    toast.dataset.type = type
+    toast.querySelector('[data-toast-title]')!.textContent = title
+    toast.querySelector('[data-toast-text]')!.textContent = text
+    toast.classList.remove('hidden')
+    clearTimeout(toastTimer)
+    toastTimer = window.setTimeout(() => toast.classList.add('hidden'), 5000)
+  }
+
+  // ---- Отправка ----
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    if (!validate()) return
+
+    const data = new FormData(form)
+    submit.disabled = true
+    spinner.classList.remove('hidden')
+
+    try {
+      const res = await fetch('/api/consultation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: data.get('name'),
+          phone: data.get('phone'),
+          message: data.get('message'),
+          company: data.get('company')
+        })
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.message)
+
+      reachGoal('consultation_sent')
+      showToast('success', 'Заявка отправлена!', 'Мы свяжемся с вами в ближайшее время.')
+      form.reset()
+      dialog.close()
+    } catch (err) {
+      showToast('error', 'Ошибка отправки', (err as Error).message || 'Не удалось отправить заявку. Попробуйте позже или позвоните нам.')
+    } finally {
+      submit.disabled = false
+      spinner.classList.add('hidden')
+    }
+  })
+
+  // ---- Кнопка «Наверх» ----
+  const scrollTop = document.getElementById('scroll-top')!
+  addEventListener('scroll', () => scrollTop.toggleAttribute('data-visible', scrollY > 300), { passive: true })
+  scrollTop.addEventListener('click', () => scrollTo({ top: 0 }))
+</script>

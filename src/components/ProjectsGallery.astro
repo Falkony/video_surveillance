@@ -1,0 +1,82 @@
+---
+import { Image, getImage } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+import { Icon } from 'astro-icon/components'
+import Lightbox from '~/components/Lightbox.astro'
+
+// Все фото из папки examples, по порядку номеров в имени файла
+const modules = import.meta.glob<{ default: ImageMetadata }>('~/assets/images/examples/*.jpg', { eager: true })
+const photos = Object.entries(modules)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, mod], i) => ({
+    image: mod.default,
+    alt: `Монтаж видеонаблюдения в Нижнем Новгороде — пример работы №${i + 1}`
+  }))
+
+const lightboxItems = await Promise.all(photos.map(async photo => ({
+  src: (await getImage({ src: photo.image, width: Math.min(photo.image.width, 1600), format: 'webp' })).src,
+  alt: photo.alt
+})))
+---
+
+<div class="relative h-full">
+  <div class="mb-8 flex min-h-[44px] items-end">
+    <h3 class="text-2xl font-bold text-white sm:text-3xl">Примеры работ</h3>
+  </div>
+
+  <div class="relative" data-carousel>
+    <ul
+      class="no-scrollbar relative flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth rounded-2xl"
+      data-carousel-track
+      aria-label="Фотографии выполненных объектов"
+    >
+      {photos.map((photo, i) => (
+        <li class="w-full shrink-0 snap-center" data-carousel-slide>
+          <button
+            type="button"
+            class="group relative block w-full overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900"
+            data-lightbox-open="projects-lightbox"
+            data-index={i}
+            aria-label={`Открыть фото ${i + 1} из ${photos.length}`}
+          >
+            <Image
+              src={photo.image}
+              alt={photo.alt}
+              format="webp"
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              loading="lazy"
+              class="aspect-[3/2] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <span class="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <span class="flex size-16 items-center justify-center rounded-full border-2 border-white/50 bg-white/20 backdrop-blur-sm">
+                <Icon name="lucide:zoom-in" class="size-8 text-white" />
+              </span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    <button type="button" data-carousel-prev aria-label="Предыдущее фото" class="group absolute top-1/2 left-2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-800/90 shadow-lg transition-colors hover:bg-neutral-700">
+      <Icon name="lucide:chevron-left" class="size-6 text-white transition-transform group-hover:scale-110" />
+    </button>
+    <button type="button" data-carousel-next aria-label="Следующее фото" class="group absolute top-1/2 right-2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-800/90 shadow-lg transition-colors hover:bg-neutral-700">
+      <Icon name="lucide:chevron-right" class="size-6 text-white transition-transform group-hover:scale-110" />
+    </button>
+
+    <p class="mt-4 text-center text-sm text-neutral-400" aria-live="polite">
+      <span data-carousel-current>1</span> / {photos.length}
+    </p>
+
+    <div class="absolute -top-4 -left-4 -z-10 size-24 rounded-full bg-primary/10 blur-2xl"></div>
+    <div class="absolute -right-4 -bottom-4 -z-10 size-32 rounded-full bg-primary/10 blur-2xl"></div>
+  </div>
+
+  <Lightbox id="projects-lightbox" label="Примеры работ" items={lightboxItems} />
+</div>
+
+<script>
+  import { initCarousels } from '~/scripts/carousel'
+  initCarousels()
+</script>
