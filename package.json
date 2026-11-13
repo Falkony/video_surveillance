@@ -12,7 +12,8 @@
     "preview": "astro preview",
     "start": "node dist/server/entry.mjs",
     "check": "astro check",
-    "images": "node scripts/optimize-images.mjs"
+    "images": "node scripts/optimize-images.mjs",
+    "max:chat-id": "node scripts/max-chat-id.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.9",

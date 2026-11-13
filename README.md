@@ -2,7 +2,7 @@
 
 Статический лендинг на **Astro + Tailwind CSS 4**. Все страницы собираются в готовый HTML
 (поисковики видят контент без выполнения JS), Node-сервер нужен только для формы заявки
-`/api/consultation`, которая отправляет сообщение в Telegram.
+`/api/consultation`, которая отправляет сообщение в мессенджер MAX.
 
 ## Команды
 
@@ -22,13 +22,18 @@ npm run check      # проверка типов
 
 | Переменная | Когда нужна | Описание |
 | --- | --- | --- |
-| `TELEGRAM_BOT_TOKEN` | в рантайме | токен бота для заявок |
-| `TELEGRAM_CHAT_ID` | в рантайме | чат, куда приходят заявки |
-| `TELEGRAM_API_URL` | в рантайме | необязательно: прокси для Bot API, если `api.telegram.org` недоступен с сервера |
+| `MAX_BOT_TOKEN` | в рантайме | токен бота MAX (business.max.ru → Чат-боты → Настройки) |
+| `MAX_CHAT_ID` | в рантайме | чат, куда приходят заявки (см. ниже) |
+| `MAX_API_URL` | в рантайме | необязательно, по умолчанию `https://platform-api.max.ru` |
 | `PUBLIC_YANDEX_METRIKA_ID` | при сборке | ID счётчика Метрики; без него счётчик не вставляется |
 | `PORT`, `HOST` | в рантайме | адрес Node-сервера (по умолчанию 3000 / 0.0.0.0) |
 
-Старые имена `NUXT_TELEGRAM_BOT_TOKEN` / `NUXT_TELEGRAM_CHAT_ID` тоже поддерживаются.
+**Как узнать `MAX_CHAT_ID`:** впишите `MAX_BOT_TOKEN` в `.env`, напишите боту в MAX что-нибудь
+(или добавьте бота в группу и напишите там) и выполните `npm run max:chat-id` — скрипт покажет chat_id.
+
+MAX рекомендует новый адрес API `platform-api2.max.ru`, но он работает на сертификате Минцифры.
+Чтобы перейти на него: скачайте корневой сертификат с gosuslugi.ru/crt, укажите в `.env`
+`MAX_API_URL=https://platform-api2.max.ru` и `NODE_EXTRA_CA_CERTS=/путь/russian_trusted_root_ca.pem`.
 
 ## Где что лежит
 
@@ -44,7 +49,7 @@ src/
 │   ├── index.astro
 │   ├── privacy.astro
 │   ├── 404.astro
-│   └── api/consultation.ts   # приём заявок → Telegram
+│   └── api/consultation.ts   # приём заявок → MAX
 ├── assets/images/     # фото работ, сертификаты, hero — Astro сам делает webp нужных размеров
 └── styles/global.css
 public/                # robots.txt, favicon, og-image, logo
