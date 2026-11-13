@@ -3,8 +3,9 @@ import type { APIRoute } from 'astro'
 // Единственный динамический маршрут — обрабатывается Node-сервером
 export const prerender = false
 
-// Старые имена переменных (NUXT_*) поддерживаются, чтобы не переписывать .env на сервере
-const env = (name: string) => process.env[name] ?? process.env[`NUXT_${name}`]
+// Bot API мессенджера MAX. platform-api2.max.ru требует доверия к сертификату
+// Минцифры (NODE_EXTRA_CA_CERTS), поэтому по умолчанию — platform-api.max.ru
+const MAX_API_URL = (process.env.MAX_API_URL || 'https://platform-api.max.ru').replace(/\/$/, '')
 
 const json = (status: number, message: string) =>
   new Response(JSON.stringify({ success: status === 200, message }), {
@@ -54,10 +55,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return json(429, 'Слишком много заявок. Пожалуйста, позвоните нам.')
   }
 
-  const token = env('TELEGRAM_BOT_TOKEN')
-  const chatId = env('TELEGRAM_CHAT_ID')
+  const token = process.env.MAX_BOT_TOKEN
+  const chatId = process.env.MAX_CHAT_ID
   if (!token || !chatId) {
-    console.error('[consultation] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID не заданы')
+    console.error('[consultation] MAX_BOT_TOKEN / MAX_CHAT_ID не заданы')
     return json(500, 'Не удалось отправить заявку. Позвоните нам, пожалуйста.')
   }
 
@@ -72,15 +73,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   ].join('\n')
 
   try {
-    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const query = new URLSearchParams({ chat_id: chatId, disable_link_preview: 'true' })
+    const res = await fetch(`${MAX_API_URL}/messages?${query}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+      headers: { Authorization: token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, format: 'html' }),
       signal: AbortSignal.timeout(10_000)
     })
     if (!res.ok) throw new Error(`${res.status} ${await res.text()}`)
   } catch (error) {
-    console.error('[consultation] Telegram API error:', error)
+    console.error('[consultation] MAX API error:', error)
     return json(502, 'Не удалось отправить заявку. Позвоните нам, пожалуйста.')
   }
 
