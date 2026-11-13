@@ -59,6 +59,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const chatId = process.env.MAX_CHAT_ID
   if (!token || !chatId) {
     console.error('[consultation] MAX_BOT_TOKEN / MAX_CHAT_ID не заданы')
+    console.error(`[consultation] Потерянная заявка: ${name}, ${phone}${message ? `, «${message}»` : ''}`)
     return json(500, 'Не удалось отправить заявку. Позвоните нам, пожалуйста.')
   }
 
@@ -80,9 +81,20 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       body: JSON.stringify({ text, format: 'html' }),
       signal: AbortSignal.timeout(10_000)
     })
-    if (!res.ok) throw new Error(`${res.status} ${await res.text()}`)
+    if (!res.ok) {
+      // MAX отвечает {"code":"...","message":"..."} — в них и причина
+      const details = await res.text().catch(() => '')
+      throw new Error(`MAX ответил ${res.status}: ${details}`)
+    }
   } catch (error) {
-    console.error('[consultation] MAX API error:', error)
+    const reason = error instanceof Error && error.name === 'TimeoutError'
+      ? `нет ответа от ${MAX_API_URL} за 10 с (сервер не может достучаться до MAX)`
+      : error instanceof Error && error.cause
+        ? `${error.message} — ${String((error.cause as Error).message ?? error.cause)}`
+        : String(error)
+    console.error(`[consultation] Заявка не отправлена в MAX: ${reason}`)
+    // Чтобы заявка не потерялась — она остаётся в логе PM2
+    console.error(`[consultation] Потерянная заявка: ${name}, ${phone}${message ? `, «${message}»` : ''}`)
     return json(502, 'Не удалось отправить заявку. Позвоните нам, пожалуйста.')
   }
 

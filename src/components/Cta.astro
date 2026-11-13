@@ -36,9 +36,11 @@ const layers = [
   </div>
 
   <div class="relative mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+    <!-- Фиксированная высота: линии и кружки остаются в верхнем/нижнем отступе секции
+         и не залезают на заголовок и текст (при h-full кружок садился между строк) -->
     <div class="@max-[1280px]:hidden" aria-hidden="true">
-      <img src={line6.src} alt="" loading="lazy" decoding="async" class="absolute -top-10 left-10 h-full w-auto sm:top-0" />
-      <img src={line7.src} alt="" loading="lazy" decoding="async" class="absolute right-0 bottom-0 h-full w-auto" />
+      <img src={line6.src} width={line6.width} height={line6.height} alt="" loading="lazy" decoding="async" class="absolute top-0 left-10 h-56 w-auto" />
+      <img src={line7.src} width={line7.width} height={line7.height} alt="" loading="lazy" decoding="async" class="absolute right-0 bottom-0 h-56 w-auto" />
     </div>
 
     <h2 id="cta-title" class="section-title">{cta.title}</h2>
