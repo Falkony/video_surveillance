@@ -225,16 +225,27 @@ check_env() {
     ok "PUBLIC_YANDEX_METRIKA_ID перенесён из NUXT_PUBLIC_YANDEX_METRIKA_ID"
   fi
 
+  # Заявки теперь уходят в MAX — добавляем пустые ключи, если .env создан по старому примеру
+  if ! grep -qE '^[[:space:]]*MAX_BOT_TOKEN=' .env; then
+    printf '\n# Бот MAX для заявок с формы (chat_id: npm run max:chat-id)\nMAX_BOT_TOKEN=\nMAX_CHAT_ID=\n' >> .env
+    info "В .env добавлены ключи MAX_BOT_TOKEN и MAX_CHAT_ID"
+  fi
+
   local token chat metrika
-  token="$(env_get TELEGRAM_BOT_TOKEN)";   [[ -n "$token" ]] || token="$(env_get NUXT_TELEGRAM_BOT_TOKEN)"
-  chat="$(env_get TELEGRAM_CHAT_ID)";      [[ -n "$chat" ]]  || chat="$(env_get NUXT_TELEGRAM_CHAT_ID)"
+  token="$(env_get MAX_BOT_TOKEN)"
+  chat="$(env_get MAX_CHAT_ID)"
   metrika="$(env_get PUBLIC_YANDEX_METRIKA_ID)"
   PORT="$(env_get PORT)"; PORT="${PORT:-3000}"
 
   if [[ -n "$token" && -n "$chat" ]]; then
-    ok "Telegram для заявок настроен"
+    ok "MAX для заявок настроен (чат $chat)"
+  elif [[ -n "$token" ]]; then
+    warn "MAX_CHAT_ID не задан — напишите боту в MAX и выполните: cd $APP_DIR && npm run max:chat-id"
   else
-    warn "TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID не заданы — форма заявки будет отвечать ошибкой"
+    warn "MAX_BOT_TOKEN / MAX_CHAT_ID не заданы — форма заявки будет отвечать ошибкой"
+  fi
+  if [[ -n "$(env_get TELEGRAM_BOT_TOKEN)$(env_get NUXT_TELEGRAM_BOT_TOKEN)" ]]; then
+    info "Переменные TELEGRAM_* больше не используются — заявки уходят в MAX, их можно удалить из .env"
   fi
   if [[ -n "$metrika" ]]; then
     ok "Яндекс.Метрика: счётчик $metrika"

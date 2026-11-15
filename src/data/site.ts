@@ -29,7 +29,7 @@ export const site = {
 }
 
 // Дата редакции политики и согласия — менять при каждой правке их текста
-export const legalRevision = '04.11.2026'
+export const legalRevision = '13.11.2026'
 
 export const nav = [
   { label: 'Услуги', href: '#services' },
